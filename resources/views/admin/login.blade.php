@@ -47,14 +47,16 @@
                                 </div>
                                 <button class="au-btn au-btn--block au-btn--green m-b-20" type="submit">Log in</button>
                                 @if (session()->has('error'))
-                                <div class="sufee-alert alert with-close alert-success alert-dismissable fade show" role="alert">
-                                    {{session('error')}}
+                                <div class="sufee-alert alert with-close alert-danger alert-dismissable fade show" role="alert">
+                                    <span class="badge badge-pill badge-danger">Failed</span>
+                                        {{session('error')}}
                                     <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">x</span></button>
                                 </div>    
                                 @endif
                                 @if (session()->has('success'))
                                 <div class="sufee-alert alert with-close alert-success alert-dismissable fade show" role="alert">
-                                    {{session('success')}}
+                                    <span class="badge badge-pill badge-success">Success</span>
+                                        {{session('success')}}
                                     <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">x</span></button>
                                 </div>    
                                 @endif

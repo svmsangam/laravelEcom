@@ -4,8 +4,10 @@
 @section('container')
 @if (session()->has('message'))
 <div class="sufee-alert alert with-close alert-success alert-dismissable fade show" role="alert">
+    <span class="badge badge-pill badge-success">Success</span>
     {{session('message')}}
-    <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">x</span></button>
+    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+        <span aria-hidden="true">x</span></button>
 </div>    
 @endif
 <h1 class="mb20">Category</h1>

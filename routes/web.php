@@ -6,6 +6,7 @@ use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\ColorController;
 use App\Http\Controllers\CouponController;
 use App\Http\Controllers\FlavourController;
+use App\Http\Controllers\ProductController;
 use App\Http\Controllers\SizeController;
 
 /*
@@ -32,7 +33,7 @@ Route::group(['middleware'=>'admin_auth'],function(){
         session()->flash('success','Logout Successfully');
         return redirect('admin');
     });
-    //Coupon 
+    //Category
     Route::get('admin/category',[CategoryController::class,'index']);
     Route::get('admin/category/manage_category',[CategoryController::class,'manage_category']);
     Route::get('admin/category/manage_category/{id}',[CategoryController::class,'manage_category']);
@@ -72,5 +73,13 @@ Route::group(['middleware'=>'admin_auth'],function(){
     Route::post('admin/color/manage_color_process',[ColorController::class,'manage_color_process'])->name('color.manage_color_process');
     Route::get('admin/color/delete/{id}',[ColorController::class,'delete']);
     Route::get('admin/color/status/{status}/{id}',[ColorController::class,'status']);
+
+    //Product
+    Route::get('admin/product',[ProductController::class,'index']);
+    Route::get('admin/product/manage_product',[ProductController::class,'manage_product']);
+    Route::get('admin/product/manage_product/{id}',[ProductController::class,'manage_product']);
+    Route::post('admin/product/manage_product_process',[ProductController::class,'manage_product_process'])->name('product.manage_product_process');
+    Route::get('admin/product/delete/{id}',[ProductController::class,'delete']);
+    Route::get('admin/product/status/{status}/{id}',[ProductController::class,'status']);
 
 });
