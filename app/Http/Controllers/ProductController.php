@@ -32,6 +32,10 @@ class ProductController extends Controller
             $result['status'] = $arr['0']->status;
             $result['slug'] = $arr['0']->slug; 
             $result['id'] = $arr['0']->id;
+            $result['prodAttrArr'] = DB::table('product_attrib')->where(['product_id'=>$id])->get();
+            // echo'<pre>';
+            // print_r($result['prodAttrArr']);
+            // die();
 
         }else{
             $result['name'] ='';
@@ -43,6 +47,20 @@ class ProductController extends Controller
             $result['status'] ='';
             $result['slug'] = ''; 
             $result['id'] = 0;
+            //Product Attribute
+            $result['prodAttrArr'][0]['id']='';
+            $result['prodAttrArr'][0]['product_id']='';
+            $result['prodAttrArr'][0]['sku']='';
+            $result['prodAttrArr'][0]['attr_image']='';
+            $result['prodAttrArr'][0]['mrp']='';
+            $result['prodAttrArr'][0]['price']='';
+            $result['prodAttrArr'][0]['quantity']='';
+            $result['prodAttrArr'][0]['size_id']='';
+            $result['prodAttrArr'][0]['color_id']='';
+            $result['prodAttrArr'][0]['flavour_id']='';
+            // echo'<pre>';
+            // print_r($result['prodAttrArr']);
+            // die(); 
 
         }
         $result['category'] = DB::table('categories')->where(['status'=>1])->get();
@@ -89,6 +107,54 @@ class ProductController extends Controller
         $product->hasNoEgg = $request->has('hasNoEgg');
         $product->keywords = $request->post('keywords');
         $product->save();
+        $prod_id=$product->id;
+        
+        /*Product attribute*/
+        $pAttrId = $request->post('prodAId');
+        $skuArr = $request->post('sku');
+        $mrpArr = $request->post('mrp');
+        $priceArr = $request->post('price');
+        $qtyArr = $request->post('quantity');
+        $size_IdArr = $request->post('size_id');
+        $color_IdArr = $request->post('color_id');
+        $flavour_IdArr = $request->post('flavour_id');
+        $imageAttrArr = $request->post('attr_image');
+
+        foreach($skuArr as $key=>$val){
+            $productAttrArr['product_id']=$prod_id;
+            $productAttrArr['sku'] = $skuArr[$key];
+            $productAttrArr['attr_image']="test";
+            $productAttrArr['mrp'] = $mrpArr[$key];
+            $productAttrArr['price']=$priceArr[$key];
+            $productAttrArr['quantity']=$qtyArr[$key];
+            if($size_IdArr[$key]==''){
+                $productAttrArr['size_id']=0;    
+            }
+            else{
+                $productAttrArr['size_id']=$size_IdArr[$key];
+            }
+            if($color_IdArr[$key]==''){
+                $productAttrArr['color_id']=0;    
+            }
+            else{
+                $productAttrArr['color_id']=$color_IdArr[$key];
+            }
+            if($flavour_IdArr[$key]==''){
+                $productAttrArr['flavour_id']=0;    
+            }
+            else{
+                $productAttrArr['flavour_id']=$flavour_IdArr[$key];
+            }
+            if($pAttrId != ''){
+                DB::table('product_attrib')->where(['id'=>$pAttrId[$key]])->update($productAttrArr);
+            }else{
+                DB::table('product_attrib')->insert($productAttrArr);
+            }
+        }
+    
+        /*Product attribute*/
+
+
         $request->session()->flash('message',$msg);
         return redirect('admin/product');
     }
@@ -98,7 +164,10 @@ class ProductController extends Controller
         $request->session()->flash('message','Product Deleted');
         return redirect('admin/product');
     }
-
+    public function product_attr_delete(Request $request,$paId,$pId){
+        DB::table('product_attrib')->where(['id'=>$paId])->delete();
+        return redirect('admin/product/manage_product/'.$pId);
+    }
     public function status(Request $request, $status,$id)
     {
         $product = Product::find($id);
