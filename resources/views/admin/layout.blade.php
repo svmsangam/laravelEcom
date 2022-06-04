@@ -13,6 +13,7 @@
     {{-- <link href="{{asset('admin_assets/vendor/font-awesome-4.7/css/font-awesome.min.css')}}" rel="stylesheet" media="all"> --}}
     <link href="{{asset('admin_assets/vendor/font-awesome-5/css/fontawesome-all.min.css')}}" rel="stylesheet" media="all">
     <link href="{{asset('admin_assets/vendor/mdi-font/css/material-design-iconic-font.min.css')}}" rel="stylesheet" media="all">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.5.0/css/all.min.css">
     <link href="{{asset('admin_assets/vendor/wow/animate.css')}}" rel="stylesheet" media="all">
 
 
@@ -72,7 +73,7 @@
                         </li>
                         <li class="@yield('product_select')">
                             <a href="{{url('admin/product')}}">
-                                <i class="fas fa-paint-brush"></i>Product</a>
+                                <i class="fab fa-product-hunt" aria-hidden="true"></i>Product</a>
                         </li>
                     </ul>
                 </div>
@@ -118,7 +119,7 @@
                     </li>
                     <li class="@yield('product_select')">
                         <a href="{{url('admin/product')}}">
-                            <i class="fas fa-paint-brush"></i>Product</a>
+                            <i class="fab fa-product-hunt" aria-hidden="true"></i>Product</a>
                     </li>
                     </ul>
                 </nav>

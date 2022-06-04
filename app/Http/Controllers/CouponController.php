@@ -23,13 +23,19 @@ class CouponController extends Controller
             $arr = Coupon::where(['id'=>$id])->get();
             $result['title'] = $arr['0']->title;
             $result['value'] = $arr['0']->value;
-            $result['code'] = $arr['0']->code; 
+            $result['code'] = $arr['0']->code;
+            $result['type'] = $arr['0']->type;  
+            $result['min_order_amt'] = $arr['0']->min_order_amt;
+            $result['is_one_time'] = $arr['0']->is_one_time;  
             $result['id'] = $arr['0']->id;
 
         }else{
             $result['title'] = '';
             $result['value'] = '';
             $result['code'] = '';
+            $result['type'] ='';  
+            $result['min_order_amt'] ='';
+            $result['is_one_time'] =''; 
             $result['id'] = 0;
         }
         return view('admin.manage_coupon',$result);
@@ -50,6 +56,9 @@ class CouponController extends Controller
        $coupon->title = $request->post('title');
        $coupon->code = $request->post('code');
        $coupon->value = $request->post('value');
+       $coupon->type = $request->post('type');
+       $coupon->min_order_amt = $request->post('min_order_amount');
+       $coupon->is_one_time = $request->post('is_one_time');
        $coupon->save();
         $request->session()->flash('message',$msg);
         return redirect('admin/coupon');

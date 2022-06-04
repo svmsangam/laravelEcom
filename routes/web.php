@@ -86,4 +86,6 @@ Route::group(['middleware'=>'admin_auth'],function(){
     //Product Attribute
     Route::get('admin/product/product_attr_delete/{paId}/{pId}',[ProductController::class,'product_attr_delete']);
 
+    //Product Images
+    Route::get('admin/product/product_images_delete/{pIId}/{pId}',[ProductController::class,'product_image_delete']);
 });
