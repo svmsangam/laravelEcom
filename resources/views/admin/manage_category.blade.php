@@ -39,7 +39,7 @@
                                 <div class="col-md-4"> 
                                     <label for="parent_category_id" class="control-label mb-1">Parent Category</label>
                                     <select id="parent_category_id" name="parent_category_id"  type="text" class="form-control cc-name valid">
-                                        <option value="">Select Parent Category</option>
+                                        <option value="0">Select Parent Category</option>
                                         @foreach($category as $list)
                                             @if($parent_category_id==$list->id)
                                                 <option value="{{$list->id}}" selected>
@@ -65,6 +65,14 @@
                                             {{$message}}
                                         </div>
                                     @enderror
+                                </div>
+                                <div class="col-md-4">
+                                    <div class="form-group has-success">
+                                        <div class="form-check form-switch mt-5">
+                                            <input class="form-check-input" type="checkbox" name="showOnHome" id="showOnHome" {{$checkHome}}>
+                                            <label class="form-check-label" for="hasEgg">Show on Home?</label>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
                         </div>

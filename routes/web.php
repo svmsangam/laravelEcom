@@ -1,13 +1,14 @@
 <?php
-
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\AdminController;
-use App\Http\Controllers\CategoryController;
-use App\Http\Controllers\ColorController;
-use App\Http\Controllers\CouponController;
-use App\Http\Controllers\FlavourController;
-use App\Http\Controllers\ProductController;
-use App\Http\Controllers\SizeController;
+use App\Http\Controllers\Admin\AdminController;
+use App\Http\Controllers\Admin\CategoryController;
+use App\Http\Controllers\Admin\ColorController;
+use App\Http\Controllers\Admin\CouponController;
+use App\Http\Controllers\Admin\CustomerController;
+use App\Http\Controllers\Admin\FlavourController;
+use App\Http\Controllers\Admin\ProductController;
+use App\Http\Controllers\Admin\SizeController;
+use App\Http\Controllers\Front\FrontController;
 
 /*
 |--------------------------------------------------------------------------
@@ -20,9 +21,7 @@ use App\Http\Controllers\SizeController;
 |
 */
 
-Route::get('/', function () {
-    return view('welcome');
-});
+Route::get('/',[FrontController::class,'index']);
 Route::get('admin',[AdminController::class,'index']);
 Route::post('admin/auth',[AdminController::class,'auth'])->name('admin.auth');
 Route::group(['middleware'=>'admin_auth'],function(){
@@ -88,4 +87,12 @@ Route::group(['middleware'=>'admin_auth'],function(){
 
     //Product Images
     Route::get('admin/product/product_images_delete/{pIId}/{pId}',[ProductController::class,'product_image_delete']);
+
+
+    //Admin customer management
+    Route::get('admin/customer',[CustomerController::class,'index']);
+    Route::get('admin/customer/view_customer/{id}',[CustomerController::class,'view_customer']);
+    Route::get('admin/customer/status/{status}/{id}',[CustomerController::class,'status']);
+
+
 });
