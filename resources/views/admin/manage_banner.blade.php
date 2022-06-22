@@ -1,9 +1,9 @@
 @extends('admin/layout')
-@section('title','Manage Category')
-@section('category_select','active')
+@section('title','Manage Banner')
+@section('banner_select','active')
 @section('container')
-<h1 class="mb20">Add Category</h1>
-<a href="{{url('admin/category')}}">
+<h1 class="mb20">Add Banner</h1>
+<a href="{{url('admin/banner')}}">
     <button type="button" class="btn btn-success">Back</button>
 </a>
 <div class="row m-t-30">
@@ -11,68 +11,54 @@
         <div class="col-lg-12">
             <div class="card">
                 <div class="card-body">
-                    <form action="{{route('category.manage_category_process')}}" method="post" enctype="multipart/form-data">
+                    <form action="{{route('banner.manage_banner_process')}}" method="post" enctype="multipart/form-data">
                         @csrf
                         <div class="form-group">
                         </div>
                         <div class="form-group">
                             <div class="row">
                                 <div class="col-md-4">
-                                    <label for="category_name" class="control-label mb-1">Category</label>
-                                    <input id="category_name"  value = "{{$category_name}}" name="category_name" type="text" class="form-control" aria-required="true" aria-invalid="false" required>
-                                    @error('category_name')
+                                    <label for="btn_text" class="control-label mb-1">Button Text</label>
+                                    <input id="btn_text"  value = "{{$btn_text}}" name="btn_text" type="text" class="form-control" aria-required="true" aria-invalid="false">
+                                    @error('btn_text')
                                         <div class="alert alert-danger">
                                             {{$message}}
                                         </div>
                                     @enderror
                                 </div>
                                 <div class="col-md-4">
-                                    <label for="slug" class="control-label mb-1">Category Slug</label>
-                                    <input id="slug" name="slug" value = "{{$slug}}"  type="text" class="form-control cc-name valid" required/>
-                                    @error('slug')
+                                    <label for="btn_link" class="control-label mb-1">Banner Link</label>
+                                    <input id="btn_link" name="btn_link" value = "{{$btn_link}}"  type="text" class="form-control cc-name valid"/>
+                                    @error('btn_link')
                                     <div class="alert alert-danger">
                                         {{$message}}
                                     </div>
                                     @enderror
                                 </div>
-                                <div class="col-md-4"> 
-                                    <label for="parent_category_id" class="control-label mb-1">Parent Category</label>
-                                    <select id="parent_category_id" name="parent_category_id"  type="text" class="form-control cc-name valid">
-                                        <option value="0">Select Parent Category</option>
-                                        @foreach($category as $list)
-                                            @if($parent_category_id==$list->id)
-                                                <option value="{{$list->id}}" selected>
-                                            @else
-                                                <option value="{{$list->id}}">
-                                            @endif        
-                                            {{$list->category_name}}</option>
-                                        @endforeach
-                                    </select>
-                                </div>
                             </div>
                             <div class="row">
                                 <div class="col-md-8">
-                                    <label for="category_image" class="control-label mb-1">Category Image</label>
-                                    <input id="category_image" name="category_image"  type="file" class="form-control cc-name valid"/>
+                                    <label for="image" class="control-label mb-1">Image</label>
+                                    <input id="image" name="image"  type="file" class="form-control cc-name valid"/>
                                     <div class="mt-2">
-                                        @if($category_image !='')
-                                        <img width="100px" src="{{asset('storage/media/categories/'.$category_image )}}" alt="{{$category_name}}"/>
+                                        @if($image !='')
+                                        <img width="100px" src="{{asset('storage/media/banners/'.$image )}}" alt="{{$btn_text}}"/>
                                         @endif
                                     </div>
-                                    @error('category_image')
+                                    @error('image')
                                         <div class="alert alert-danger">
                                             {{$message}}
                                         </div>
                                     @enderror
                                 </div>
-                                <div class="col-md-4">
+                                {{-- <div class="col-md-4">
                                     <div class="form-group has-success">
                                         <div class="form-check form-switch mt-5">
                                             <input class="form-check-input" type="checkbox" name="showOnHome" id="showOnHome" {{$checkHome}}>
                                             <label class="form-check-label" for="hasEgg">Show on Home?</label>
                                         </div>
                                     </div>
-                                </div>
+                                </div> --}}
                             </div>
                         </div>
                         <div>

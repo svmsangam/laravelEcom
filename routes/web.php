@@ -6,6 +6,7 @@ use App\Http\Controllers\Admin\ColorController;
 use App\Http\Controllers\Admin\CouponController;
 use App\Http\Controllers\Admin\CustomerController;
 use App\Http\Controllers\Admin\FlavourController;
+use App\Http\Controllers\Admin\HomeBannerController;
 use App\Http\Controllers\Admin\ProductController;
 use App\Http\Controllers\Admin\SizeController;
 use App\Http\Controllers\Front\FrontController;
@@ -20,8 +21,13 @@ use App\Http\Controllers\Front\FrontController;
 | contains the "web" middleware group. Now create something great!
 |
 */
-
+//Front
 Route::get('/',[FrontController::class,'index']);
+Route::get('product/{slug}',[FrontController::class,'product']);
+Route::post('/add_to_cart',[FrontController::class,'add_to_cart']);
+Route::get('cart',[FrontController::class,'cart']);
+
+//Admin
 Route::get('admin',[AdminController::class,'index']);
 Route::post('admin/auth',[AdminController::class,'auth'])->name('admin.auth');
 Route::group(['middleware'=>'admin_auth'],function(){
@@ -72,6 +78,14 @@ Route::group(['middleware'=>'admin_auth'],function(){
     Route::post('admin/color/manage_color_process',[ColorController::class,'manage_color_process'])->name('color.manage_color_process');
     Route::get('admin/color/delete/{id}',[ColorController::class,'delete']);
     Route::get('admin/color/status/{status}/{id}',[ColorController::class,'status']);
+    
+    //Banner
+    Route::get('admin/banner',[HomeBannerController::class,'index']);
+    Route::get('admin/banner/manage_banner',[HomeBannerController::class,'manage_banner']);
+    Route::get('admin/banner/manage_banner/{id}',[HomeBannerController::class,'manage_banner']);
+    Route::post('admin/banner/manage_banner_process',[HomeBannerController::class,'manage_banner_process'])->name('banner.manage_banner_process');
+    Route::get('admin/banner/delete/{id}',[HomeBannerController::class,'delete']);
+    Route::get('admin/banner/status/{status}/{id}',[HomeBannerController::class,'status']);
 
     //Product
     Route::get('admin/product',[ProductController::class,'index']);

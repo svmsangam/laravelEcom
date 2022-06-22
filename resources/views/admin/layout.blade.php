@@ -71,6 +71,10 @@
                             <a href="{{url('admin/color')}}">
                                 <i class="fas fa-paint-brush"></i>Color</a>
                         </li>
+                        <li class="@yield('banner_select')">
+                            <a href="{{url('admin/banner')}}">
+                                <i class="fas fa-images" aria-hidden="true"></i>Banner</a>
+                        </li>
                         <li class="@yield('product_select')">
                             <a href="{{url('admin/product')}}">
                                 <i class="fab fa-product-hunt" aria-hidden="true"></i>Product</a>
@@ -120,6 +124,10 @@
                             <a href="{{url('admin/color')}}">
                                 <i class="fas fa-paint-brush"></i>Color</a>
                         </li>
+                    </li>
+                    <li class="@yield('banner_select')">
+                        <a href="{{url('admin/banner')}}">
+                            <i class="fas fa-images" aria-hidden="true"></i>Banner</a>
                     </li>
                     <li class="@yield('product_select')">
                         <a href="{{url('admin/product')}}">

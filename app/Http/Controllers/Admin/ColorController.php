@@ -33,7 +33,7 @@ class ColorController extends Controller
             $color = Color::find($request->post('id'));
             $msg = "Color Updated";
         }else{
-            $color = new color();
+            $color = new Color();
             $msg = "Color Added";
         }
        $color->color = $request->post('color');

@@ -1,4 +1,5 @@
 @extends('front/layout')
+@section('title','Home')
 @section('container')
  <!-- Start slider -->
  <section id="aa-slider">
@@ -7,65 +8,18 @@
         <div class="seq-screen">
           <ul class="seq-canvas">
             <!-- single slide item -->
+            @foreach ($home_banners as $item)
             <li>
               <div class="seq-model">
-                <img data-seq src="{{asset('front_assets/img/slider/1.jpg')}}" alt="Men slide img" />
+                <img data-seq src="{{asset('storage/media/banners/'.$item->image )}}" alt="{{$item->btn_text}}" />
               </div>
+              @if ($item->btn_text!= '')
               <div class="seq-title">
-               <span data-seq>Save Up to 75% Off</span>                
-                <h2 data-seq>Men Collection</h2>                
-                <p data-seq>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Minus, illum.</p>
-                <a data-seq href="#" class="aa-shop-now-btn aa-secondary-btn">SHOP NOW</a>
+                <a data-seq target="_blank" href="{{$item->btn_link}}" class="aa-shop-now-btn aa-secondary-btn">{{$item->btn_text}}</a>
               </div>
+              @endif    
             </li>
-            <!-- single slide item -->
-            <li>
-              <div class="seq-model">
-                <img data-seq src="{{asset('front_assets/img/slider/2.jpg')}}" alt="Wristwatch slide img" />
-              </div>
-              <div class="seq-title">
-                <span data-seq>Save Up to 40% Off</span>                
-                <h2 data-seq>Wristwatch Collection</h2>                
-                <p data-seq>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Minus, illum.</p>
-                <a data-seq href="#" class="aa-shop-now-btn aa-secondary-btn">SHOP NOW</a>
-              </div>
-            </li>
-            <!-- single slide item -->
-            <li>
-              <div class="seq-model">
-                <img data-seq src="{{asset('front_assets/img/slider/3.jpg')}}" alt="Women Jeans slide img" />
-              </div>
-              <div class="seq-title">
-                <span data-seq>Save Up to 75% Off</span>                
-                <h2 data-seq>Jeans Collection</h2>                
-                <p data-seq>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Minus, illum.</p>
-                <a data-seq href="#" class="aa-shop-now-btn aa-secondary-btn">SHOP NOW</a>
-              </div>
-            </li>
-            <!-- single slide item -->           
-            <li>
-              <div class="seq-model">
-                <img data-seq src="{{asset('front_assets/img/slider/4.jpg')}}" alt="Shoes slide img" />
-              </div>
-              <div class="seq-title">
-                <span data-seq>Save Up to 75% Off</span>                
-                <h2 data-seq>Exclusive Shoes</h2>                
-                <p data-seq>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Minus, illum.</p>
-                <a data-seq href="#" class="aa-shop-now-btn aa-secondary-btn">SHOP NOW</a>
-              </div>
-            </li>
-            <!-- single slide item -->  
-             <li>
-              <div class="seq-model">
-                <img data-seq src="{{asset('front_assets/img/slider/5.jpg')}}" alt="Male Female slide img" />
-              </div>
-              <div class="seq-title">
-                <span data-seq>Save Up to 50% Off</span>                
-                <h2 data-seq>Best Collection</h2>                
-                <p data-seq>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Minus, illum.</p>
-                <a data-seq href="#" class="aa-shop-now-btn aa-secondary-btn">SHOP NOW</a>
-              </div>
-            </li>                   
+            @endforeach                
           </ul>
         </div>
         <!-- slider navigation btn -->
@@ -142,11 +96,13 @@
                           <figure>
                             <a class="aa-product-img" href="{{url('product/'.$productArr->slug)}}">
                                 <img src="{{asset('storage/media/'.$productArr->image)}}" style="height:300px;width:300px;" alt="{{$productArr->name}}"></a>
-                            <a class="aa-add-card-btn" href="javascript:void(0)"><span class="fa fa-shopping-cart"></span>Add To Cart</a>
+                            <a class="aa-add-card-btn"  
+                              href="javascript:void(0)" onclick="add_to_home_cart('{{$productArr->id}}','{{$home_product_attrib[$productArr->id][0]->size}}')">
+                              <span class="fa fa-shopping-cart"></span>Add To Cart</a>
                             <figcaption>
                               <h4 class="aa-product-title"><a href="{{url('product/'.$productArr->slug)}}">{{$productArr->name}}</a></h4>
-                              <span class="aa-product-price">Rs {{$home_product_attrib[$productArr->id][0]->mrp}}</span><span class="aa-product-price">
-                                <del>Rs {{$home_product_attrib[$productArr->id][0]->price}}</del></span>
+                              <span class="aa-product-price"><del>Rs {{$home_product_attrib[$productArr->id][0]->mrp}}</del></span><span class="aa-product-price">
+                                Rs {{$home_product_attrib[$productArr->id][0]->price}}</span>
                             </figcaption>
                           </figure>                          
                         </li>  
@@ -195,11 +151,13 @@
                        <figure>
                          <a class="aa-product-img" href="{{url('product/'.$productArr->slug)}}">
                              <img src="{{asset('storage/media/'.$productArr->image)}}" style="height:300px;width:300px;" alt="{{$productArr->name}}"></a>
-                         <a class="aa-add-card-btn" href="javascript:void(0)"><span class="fa fa-shopping-cart"></span>Add To Cart</a>
+                         <a class="aa-add-card-btn" href="javascript:void(0)" 
+                            onclick="add_to_home_cart('{{$productArr->id}}','{{$home_trending_product_attrib[$productArr->id][0]->size}}')">
+                            <span class="fa fa-shopping-cart"></span>Add To Cart</a>
                          <figcaption>
                            <h4 class="aa-product-title"><a href="{{url('product/'.$productArr->slug)}}">{{$productArr->name}}</a></h4>
-                           <span class="aa-product-price">Rs {{$home_trending_product_attrib[$productArr->id][0]->mrp}}</span><span class="aa-product-price">
-                             <del>Rs {{$home_trending_product_attrib[$productArr->id][0]->price}}</del></span>
+                           <span class="aa-product-price"><del>Rs {{$home_trending_product_attrib[$productArr->id][0]->mrp}}</del></span><span class="aa-product-price">
+                             Rs {{$home_trending_product_attrib[$productArr->id][0]->price}}</span>
                          </figcaption>
                        </figure>                          
                      </li>  
@@ -225,11 +183,13 @@
                             <figure>
                               <a class="aa-product-img" href="{{url('product/'.$productArr->slug)}}">
                                   <img src="{{asset('storage/media/'.$productArr->image)}}" style="height:300px;width:300px;" alt="{{$productArr->name}}"></a>
-                              <a class="aa-add-card-btn" href="javascript:void(0)"><span class="fa fa-shopping-cart"></span>Add To Cart</a>
+                              <a class="aa-add-card-btn" href="javascript:void(0)" 
+                                onclick="add_to_home_cart('{{$productArr->id}}','{{$home_featured_product_attrib[$productArr->id][0]->size}}')">
+                                <span class="fa fa-shopping-cart"></span>Add To Cart</a>
                               <figcaption>
                                 <h4 class="aa-product-title"><a href="{{url('product/'.$productArr->slug)}}">{{$productArr->name}}</a></h4>
-                                <span class="aa-product-price">Rs {{$home_featured_product_attrib[$productArr->id][0]->mrp}}</span><span class="aa-product-price">
-                                  <del>Rs {{$home_featured_product_attrib[$productArr->id][0]->price}}</del></span>
+                                <span class="aa-product-price"><del>Rs {{$home_featured_product_attrib[$productArr->id][0]->mrp}}</del></span><span class="aa-product-price">
+                                  Rs {{$home_featured_product_attrib[$productArr->id][0]->price}}</span>
                               </figcaption>
                             </figure>                          
                           </li>  
@@ -255,11 +215,13 @@
                           <figure>
                             <a class="aa-product-img" href="{{url('product/'.$productArr->slug)}}">
                                 <img src="{{asset('storage/media/'.$productArr->image)}}" style="height:300px;width:300px;" alt="{{$productArr->name}}"></a>
-                            <a class="aa-add-card-btn" href="javascript:void(0)"><span class="fa fa-shopping-cart"></span>Add To Cart</a>
+                            <a class="aa-add-card-btn" href="javascript:void(0)"
+                              onclick="add_to_home_cart('{{$productArr->id}}','{{$home_discounted_product_attrib[$productArr->id][0]->size}}')">
+                              <span class="fa fa-shopping-cart"></span>Add To Cart</a>
                             <figcaption>
                               <h4 class="aa-product-title"><a href="{{url('product/'.$productArr->slug)}}">{{$productArr->name}}</a></h4>
-                              <span class="aa-product-price">Rs {{$home_discounted_product_attrib[$productArr->id][0]->mrp}}</span><span class="aa-product-price">
-                                <del>Rs {{$home_discounted_product_attrib[$productArr->id][0]->price}}</del></span>
+                              <span class="aa-product-price"><del>Rs {{$home_discounted_product_attrib[$productArr->id][0]->mrp}}</del></span><span class="aa-product-price">
+                                Rs {{$home_discounted_product_attrib[$productArr->id][0]->price}}</span>
                             </figcaption>
                           </figure>                          
                         </li>  
@@ -281,6 +243,12 @@
       </div>
     </div>
   </section>
-  <!-- / popular section --> 
-  <!-- / popular section --> 
+  <!-- / popular section -->
+  <input type="hidden" id="qty" value="1">
+  <form id="addToCartForm">
+    <input type="hidden" id="size_id" name="size_id">
+    <input type="hidden" id="productQty" name="productQty">
+    <input type="hidden" id="product_id" name="product_id">
+    @csrf
+  </form>  
   @endsection   

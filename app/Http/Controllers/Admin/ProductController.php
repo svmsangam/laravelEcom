@@ -202,9 +202,9 @@ class ProductController extends Controller
                 if($request->hasFile("attr_image.$key")){
                     if($request->post('id')>0){
                         $arrAttrImages = DB::table('product_attrib')->where(['id'=>$paidArr[$key]])->get();
-                        if(Storage::exists('/public/media/'.$arrAttrImages[0]->attr_image)){
-                            Storage::delete('/public/media/'.$arrAttrImages[0]->attr_image);
-                        }
+                            if(Storage::exists('/public/media/'.$arrAttrImages[0]->attr_image)){
+                                Storage::delete('/public/media/'.$arrAttrImages[0]->attr_image);
+                            }                   
                     }
                     $rand = rand('11111111','99999999');
                     $attr_image = $request->file("attr_image.$key");
@@ -234,10 +234,12 @@ class ProductController extends Controller
                 if($request->hasFile("images.$key")){
                     if($request->post('id')>0){
                         $arrImages = DB::table('product_images')->where(['id'=>$piidArr[$key]])->get();
+                        if(!($arrImages->isEmpty())){
                         if(Storage::exists('/public/media/'.$arrImages[0]->images)){
                             Storage::delete('/public/media/'.$arrImages[0]->images);
+                            }
                         }
-                    }
+                     }
                     $rand = rand('11111111','99999999');
                     $attr_image = $request->file("images.$key");
                     $ext = $attr_image->extension();

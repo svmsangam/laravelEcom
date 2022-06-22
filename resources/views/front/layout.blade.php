@@ -4,7 +4,7 @@
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">    
-    <title>Daily Shop | Home</title>
+    <title>@yield('title')</title>
     
     <!-- Font awesome -->
     <link href="{{asset('front_assets/css/font-awesome.css')}}" rel="stylesheet">
@@ -38,7 +38,9 @@
       <script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
       <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
     <![endif]-->
-  
+  <script>
+    var PRODUCT_IMAGE = "{{asset('storage/media')}}";
+  </script>
 
   </head>
   <body> 
@@ -104,7 +106,7 @@
                 <ul class="aa-head-top-nav-right">
                   <li><a href="javascript:void(0)">My Account</a></li>
                   <li class="hidden-xs"><a href="javascript:void(0)">Wishlist</a></li>
-                  <li class="hidden-xs"><a href="javascript:void(0)">My Cart</a></li>
+                  <li class="hidden-xs"><a href="{{url('/cart')}}">My Cart</a></li>
                   <li class="hidden-xs"><a href="javascript:void(0)">Checkout</a></li>
                   <li><a href="" data-toggle="modal" data-target="#login-modal">Login</a></li>
                 </ul>
@@ -135,41 +137,45 @@
               </div>
               <!-- / logo  -->
                <!-- cart box -->
+               @php
+                   $getCartItems = getCartItems();
+                   $getCartItemsCount = count($getCartItems);
+                   $totalPrice = 0;
+               @endphp
               <div class="aa-cartbox">
-                <a class="aa-cart-link" href="#">
+                <a class="aa-cart-link" href="{{url('/cart')}}">
                   <span class="fa fa-shopping-basket"></span>
                   <span class="aa-cart-title">SHOPPING CART</span>
-                  <span class="aa-cart-notify">2</span>
+                  <span class="aa-cart-notify">{{$getCartItemsCount}}</span>
                 </a>
                 <div class="aa-cartbox-summary">
-                  <ul>
-                    <li>
-                      <a class="aa-cartbox-img" href="#"><img src="{{asset('front_assets/img/woman-small-2.jpg')}}" alt="img"></a>
-                      <div class="aa-cartbox-info">
-                        <h4><a href="#">Product Name</a></h4>
-                        <p>1 x $250</p>
-                      </div>
-                      <a class="aa-remove-product" href="#"><span class="fa fa-times"></span></a>
-                    </li>
-                    <li>
-                      <a class="aa-cartbox-img" href="#"><img src="{{asset('front_assets/img/woman-small-1.jpg')}}" alt="img"></a>
-                      <div class="aa-cartbox-info">
-                        <h4><a href="#">Product Name</a></h4>
-                        <p>1 x $250</p>
-                      </div>
-                      <a class="aa-remove-product" href="#"><span class="fa fa-times"></span></a>
-                    </li>                    
-                    <li>
-                      <span class="aa-cartbox-total-title">
-                        Total
-                      </span>
-                      <span class="aa-cartbox-total-price">
-                        $500
-                      </span>
-                    </li>
-                  </ul>
-                  <a class="aa-cartbox-checkout aa-primary-btn" href="javscript:void(0)">Checkout</a>
-                </div>
+                  @if ($getCartItemsCount>0)
+                      <ul>
+                        @foreach ($getCartItems as $item)
+                        @php
+                          $totalPrice = $totalPrice + ($item->qty*$item->price);    
+                        @endphp       
+                        <li>
+                          <a class="aa-cartbox-img" href="#"><img src="{{asset('storage/media/'.$item->image)}}" 
+                            alt="{{$item->name}}"></a>
+                          <div class="aa-cartbox-info">
+                            <h4><a href="#">{{$item->name}}</a></h4>
+                            <p>{{$item->qty}}* Rs.{{$item->price}}</p>
+                          </div>
+                        </li>
+                        @endforeach    
+                        <li>
+                          <span class="aa-cartbox-total-title">
+                            Total
+                          </span>
+                          <span class="aa-cartbox-total-price">
+                            Rs.{{$totalPrice}}
+                          </span>
+                        </li>
+                      </ul>
+                      <a class="aa-cartbox-checkout aa-primary-btn" href="{{url('/checkout')}}">Checkout</a>                 
+                  @endif
+              </div>
               </div>
               <!-- / cart box -->
               <!-- search box -->
@@ -204,115 +210,7 @@
           </div>
           <div class="navbar-collapse collapse">
             <!-- Left nav -->
-            <ul class="nav navbar-nav">
-              <li><a href="{{url('/')}}">Home</a></li>
-              <li><a href="#">Men <span class="caret"></span></a>
-                <ul class="dropdown-menu">                
-                  <li><a href="#">Casual</a></li>
-                  <li><a href="#">Sports</a></li>
-                  <li><a href="#">Formal</a></li>
-                  <li><a href="#">Standard</a></li>                                                
-                  <li><a href="#">T-Shirts</a></li>
-                  <li><a href="#">Shirts</a></li>
-                  <li><a href="#">Jeans</a></li>
-                  <li><a href="#">Trousers</a></li>
-                  <li><a href="#">And more.. <span class="caret"></span></a>
-                    <ul class="dropdown-menu">
-                      <li><a href="#">Sleep Wear</a></li>
-                      <li><a href="#">Sandals</a></li>
-                      <li><a href="#">Loafers</a></li>                                      
-                    </ul>
-                  </li>
-                </ul>
-              </li>
-              <li><a href="#">Women <span class="caret"></span></a>
-                <ul class="dropdown-menu">  
-                  <li><a href="#">Kurta & Kurti</a></li>                                                                
-                  <li><a href="#">Trousers</a></li>              
-                  <li><a href="#">Casual</a></li>
-                  <li><a href="#">Sports</a></li>
-                  <li><a href="#">Formal</a></li>                
-                  <li><a href="#">Sarees</a></li>
-                  <li><a href="#">Shoes</a></li>
-                  <li><a href="#">And more.. <span class="caret"></span></a>
-                    <ul class="dropdown-menu">
-                      <li><a href="#">Sleep Wear</a></li>
-                      <li><a href="#">Sandals</a></li>
-                      <li><a href="#">Loafers</a></li>
-                      <li><a href="#">And more.. <span class="caret"></span></a>
-                        <ul class="dropdown-menu">
-                          <li><a href="#">Rings</a></li>
-                          <li><a href="#">Earrings</a></li>
-                          <li><a href="#">Jewellery Sets</a></li>
-                          <li><a href="#">Lockets</a></li>
-                          <li class="disabled"><a class="disabled" href="#">Disabled item</a></li>                       
-                          <li><a href="#">Jeans</a></li>
-                          <li><a href="#">Polo T-Shirts</a></li>
-                          <li><a href="#">SKirts</a></li>
-                          <li><a href="#">Jackets</a></li>
-                          <li><a href="#">Tops</a></li>
-                          <li><a href="#">Make Up</a></li>
-                          <li><a href="#">Hair Care</a></li>
-                          <li><a href="#">Perfumes</a></li>
-                          <li><a href="#">Skin Care</a></li>
-                          <li><a href="#">Hand Bags</a></li>
-                          <li><a href="#">Single Bags</a></li>
-                          <li><a href="#">Travel Bags</a></li>
-                          <li><a href="#">Wallets & Belts</a></li>                        
-                          <li><a href="#">Sunglases</a></li>
-                          <li><a href="#">Nail</a></li>                       
-                        </ul>
-                      </li>                   
-                    </ul>
-                  </li>
-                </ul>
-              </li>
-              <li><a href="#">Kids <span class="caret"></span></a>
-                <ul class="dropdown-menu">                
-                  <li><a href="#">Casual</a></li>
-                  <li><a href="#">Sports</a></li>
-                  <li><a href="#">Formal</a></li>
-                  <li><a href="#">Standard</a></li>                                                
-                  <li><a href="#">T-Shirts</a></li>
-                  <li><a href="#">Shirts</a></li>
-                  <li><a href="#">Jeans</a></li>
-                  <li><a href="#">Trousers</a></li>
-                  <li><a href="#">And more.. <span class="caret"></span></a>
-                    <ul class="dropdown-menu">
-                      <li><a href="#">Sleep Wear</a></li>
-                      <li><a href="#">Sandals</a></li>
-                      <li><a href="#">Loafers</a></li>                                      
-                    </ul>
-                  </li>
-                </ul>
-              </li>
-              <li><a href="#">Sports</a></li>
-             <li><a href="#">Digital <span class="caret"></span></a>
-                <ul class="dropdown-menu">                
-                  <li><a href="#">Camera</a></li>
-                  <li><a href="#">Mobile</a></li>
-                  <li><a href="#">Tablet</a></li>
-                  <li><a href="#">Laptop</a></li>                                                
-                  <li><a href="#">Accesories</a></li>                
-                </ul>
-              </li>
-              <li><a href="#">Furniture</a></li>            
-              <li><a href="javscript:void(0)">Blog <span class="caret"></span></a>
-                <ul class="dropdown-menu">                
-                  <li><a href="javscript:void(0)">Blog Style 1</a></li>
-                  <li><a href="javscript:void(0)">Blog Style 2</a></li>
-                  <li><a href="javscript:void(0)">Blog Single</a></li>                
-                </ul>
-              </li>
-              <li><a href="javscript:void(0)">Contact</a></li>
-              <li><a href="#">Pages <span class="caret"></span></a>
-                <ul class="dropdown-menu">                
-                  <li><a href="javscript:void(0)">Shop Page</a></li>
-                  <li><a href="javscript:void(0)">Shop Single</a></li>                
-                  <li><a href="javscript:void(0)">404 Page</a></li>                
-                </ul>
-              </li>
-            </ul>
+           {!! getTopNav() !!}
           </div><!--/.nav-collapse -->
         </div>
       </div>       
@@ -461,6 +359,10 @@
   <script type="text/javascript" src="{{asset('front_assets/js/nouislider.js')}}"></script>
   <!-- Custom js -->
   <script src="{{asset('front_assets/js/custom.js')}}"></script> 
-
+  <script type="text/javascript">
+    $(function(){
+        @yield('script')
+    });
+</script>
   </body>
 </html>

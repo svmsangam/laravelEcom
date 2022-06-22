@@ -175,15 +175,15 @@
                             <div class="form-group">
                                 <div class="row" id="product_image_box">
                                         @php
-                                        $loop_count_num=1;
+                                        $loop_count_image=1;
                                         @endphp 
                                     @foreach($prodImageArr as $key=>$val)
                                         @php
-                                            $loop_count_prev = $loop_count_num;
+                                            $loop_count_image_prev = $loop_count_image;
                                             $pIArr = (array)$val;
                                         @endphp
                                         <input id="piid" type="hidden"  name="piid[]" value="{{$pIArr['id']}}"/>
-                                        <div class="col-md-4 product_images_{{$loop_count_num++}}">
+                                        <div class="col-md-4 product_images_{{$loop_count_image++}}">
                                             <label for="images" class="control-label mb-1">Images</label>
                                             <input id="images" value="" name="images[]" type="file"
                                                 class="form-control" aria-required="true" aria-invalid="false"/>
@@ -195,7 +195,7 @@
                                             <label for="add" class="control-label mb-1">
                                                 Action
                                             </label>
-                                            @if($loop_count_num==2)
+                                            @if($loop_count_image==2)
                                             <button type="button" class="btn btn-success btn-md" onclick="add_more_image()">
                                                 <i class="fa fa-plus">&nbsp;Add</i></button>
                                             @else
@@ -210,7 +210,6 @@
                         </div>
                     </div>
                 </div>
-
                 <h2 class="mb-2">Product Attributes</h2>
                 @error('attr_image.*')
                 <div class="sufee-alert alert with-close alert-danger alert-dismissable fade show" role="alert">
@@ -258,7 +257,7 @@
                         $loop_count_prev = $loop_count_num;
                         $pAArr = (array)$val;
                     @endphp
-                    <input id="paid" type="hidden"  name="paid[]" value="{{$pAArr['id']}}"/>
+                    <input id="paid"  type="hidden" name="paid[]" value="{{$pAArr['id']}}"/>
                     <div class="card" id="product_attr_{{$loop_count_num++}}">
                         <div class="card-body">
                             <div class="form-group">
@@ -375,7 +374,7 @@
     var loop_count = 1;
     function add_more(){
         loop_count++;
-        var html ='<input id="paid" type="hidden"  name="paid[]"/><div class="card" id="product_attr_'+loop_count+'"><div class="card-body"><div class="form-group"><div class="row">';
+        var html ='<input id="paid" type="hidden"  name="paid[]"><div class="card" id="product_attr_'+loop_count+'"><div class="card-body"><div class="form-group"><div class="row">';
             html+='<div class="col-md-2"><label for="sku" class="control-label mb-1">SKU</label><input id="sku" value="" name="sku[]" type="text"class="form-control" aria-required="true" aria-invalid="false" required/></div>';
             html+='<div class="col-md-2"><label for="mrp" class="control-label mb-1">MRP</label><input id="mrp" value="" name="mrp[]" type="text"class="form-control" aria-required="true" aria-invalid="false" required/></div>';
             html+='<div class="col-md-2"><label for="price" class="control-label mb-1">Price</label><input id="price" value="" name="price[]" type="text"class="form-control" aria-required="true" aria-invalid="false" required/></div>';
@@ -400,13 +399,13 @@
     var loop_image_count = 1;
     function add_more_image(){
         loop_image_count++;
-        var html ='<input id="piid" type="hidden"  name="piid[]"/><div class="col-md-4 product_images_'+loop_image_count+'">';
+        var html ='<input id="piid"  type="hidden" name="piid[]"><div class="col-md-4 product_images_'+loop_image_count+'">';
         html +='<label for="images" class="control-label mb-1">Images</label><input id="images" value="" name="images[]" type="file" class="form-control" aria-required="true" aria-invalid="false"/>';    
         html+='<div class="col-md-1"><label for="remove" class="control-label mb-1">Action</label><button type="button" class="btn btn-danger btn-md" onclick=remove_more_image("'+loop_image_count+'")><i class="fa fa-minus">&nbsp;Remove</i></button></div>';
         html+='</div>';
         jQuery('#product_image_box').append(html);
     }
-    function remove_more_image(loop_image_count){
+    function remove_more_image(loop_image_count){       
         jQuery('.product_images_'+loop_image_count).remove();
     }
     CKEDITOR.replace('desc');

@@ -4182,4 +4182,9 @@ img {
     padding: 5px 2px;
   }
 }
-
+.lead_time{
+  color: red;
+  margin-top: -12px;
+  font-size: 13px;
+  font-weight: bold;
+}
