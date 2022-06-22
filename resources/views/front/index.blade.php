@@ -43,7 +43,7 @@
                     @foreach ($home_categories as $item)
                         <div class="aa-single-promo-right">
                             <div class="aa-promo-banner">                      
-                            <img src="{{asset('storage/media/categories/'.$item->category_image)}}" style="object-fit: inherit" alt="{{$item->category_name}}">                      
+                            <img src="{{asset('storage/media/categories/'.$item->category_image)}}" style="object-fit: cover" alt="{{$item->category_name}}">                      
                             <div class="aa-prom-content">
                                 <h4><a href="{{url('category/'.$item->slug)}}">{{$item->category_name}}</a></h4>                        
                             </div>

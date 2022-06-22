@@ -202,4 +202,22 @@ class FrontController extends Controller
     ->get();
     return view('front.cart',$result);
    }
+   public function category(Request $request, $slug){
+            $result['category_product'] = DB::table('products')
+            ->leftJoin('categories','categories.id','=','products.category_id')
+            ->select('products.id as pid','products.name','products.image','products.desc','products.slug')
+            ->where(['products.status'=>1])
+            ->where(['categories.slug'=>$slug])
+            ->get();
+
+        foreach($result['category_product'] as $list1){
+            $result['product_attrib'][$list1->pid] = DB::table('product_attrib')
+            ->leftJoin('sizes','sizes.id','=','product_attrib.size_id')
+            ->leftJoin('colors','colors.id','=','product_attrib.color_id')
+            ->leftJoin('flavours','flavours.id','=','product_attrib.flavour_id')
+            ->where(['product_attrib.product_id'=>$list1->pid])->get();
+        }  
+        // prx($result);   
+    return view('front.category',$result);
+   }
 }

@@ -425,3 +425,8 @@ function deleteCartItem(pid,size,attr_id){
   add_to_cart(pid,size);
   jQuery('#cart_item_'+attr_id).remove(); 
 }
+function sortProducts(){
+  sort_by_val= jQuery('#sort_by').val();
+  jQuery('#sort').val(sort_by_val);
+  jQuery('#categoryFilter').submit();
+}

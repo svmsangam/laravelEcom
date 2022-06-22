@@ -8,6 +8,7 @@
     
     <!-- Font awesome -->
     <link href="{{asset('front_assets/css/font-awesome.css')}}" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.5.0/css/all.min.css">
     <!-- Bootstrap -->
     <link href="{{asset('front_assets/css/bootstrap.css')}}" rel="stylesheet">   
     <!-- SmartMenus jQuery Bootstrap Addon CSS -->
