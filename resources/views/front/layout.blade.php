@@ -42,9 +42,19 @@
   <script>
     var PRODUCT_IMAGE = "{{asset('storage/media')}}";
   </script>
-
+  @php
+      if(isset($_COOKIE['login_email']) && isset($_COOKIE['login_pwd'])){
+        $loginEmail = $_COOKIE['login_email'];
+        $loginPassword = $_COOKIE['login_pwd'];
+        $is_remember = "checked= 'checked'";
+      }else{
+        $loginEmail ="";
+        $loginPassword ="";
+        $is_remember = "";
+      }
+  @endphp
   </head>
-  <body> 
+  <body class="productPage"> 
    <!-- wpf loader Two -->
     <div id="wpf-loader-two">          
       <div class="wpf-loader-two-inner">
@@ -109,7 +119,11 @@
                   <li class="hidden-xs"><a href="javascript:void(0)">Wishlist</a></li>
                   <li class="hidden-xs"><a href="{{url('/cart')}}">My Cart</a></li>
                   <li class="hidden-xs"><a href="javascript:void(0)">Checkout</a></li>
+                  @if (session()->has('USER_LOGIN')!=null)
+                  <li><a href="{{url('/logout')}}">Logout</a></li>
+                  @else
                   <li><a href="" data-toggle="modal" data-target="#login-modal">Login</a></li>
+                  @endif
                 </ul>
               </div>
             </div>
@@ -182,8 +196,8 @@
               <!-- search box -->
               <div class="aa-search-box">
                 <form action="">
-                  <input type="text" name="" id="" placeholder="Search here ex. 'man' ">
-                  <button type="submit"><span class="fa fa-search"></span></button>
+                  <input type="text"  id="search_str" placeholder="Search Products ">
+                  <button type="button" onclick="prodSearch()"><span class="fa fa-search"></span></button>
                 </form>
               </div>
               <!-- / search box -->             
@@ -322,19 +336,39 @@
       <div class="modal-content">                      
         <div class="modal-body">
         <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-          <h4>Login or Register</h4>
-          <form class="aa-login-form" action="">
-            <label for="">Username or Email address<span>*</span></label>
-            <input type="text" placeholder="Username or email">
-            <label for="">Password<span>*</span></label>
-            <input type="password" placeholder="Password">
-            <button class="aa-browse-btn" type="submit">Login</button>
-            <label for="rememberme" class="rememberme"><input type="checkbox" id="rememberme"> Remember me </label>
-            <p class="aa-lost-password"><a href="#">Lost your password?</a></p>
-            <div class="aa-register-now">
-              Don't have an account?<a href="javscript:void(0)">Register now!</a>
-            </div>
-          </form>
+          <div id="popup-login">
+            <h4>Login</h4>
+            <form class="aa-login-form" action="" id="userLoginForm">
+              <label for="">Email<span>*</span></label>
+              <input type="text" name="loginEmail" placeholder="Email" value = "{{$loginEmail}}" required>
+              <label for="">Password<span>*</span></label>
+              <input type="password" name="loginPassword" placeholder="Password" value = "{{$loginPassword}}" required>
+              <div class="login_msg"></div>
+              <button class="aa-browse-btn" type="submit" id="btnLogin">Login</button>
+              <label for="rememberme" class="rememberme"><input type="checkbox" id="rememberme" name="rememberme" {{$is_remember}}> 
+                Remember me 
+              </label>
+              <p class="aa-lost-password"><a href="javascript:void(0)" onclick="forgotPassword()">Lost your password?</a></p>
+              <div class="aa-register-now">
+                Don't have an account?<a href="{{url('/register')}}">Register now!</a>
+              </div>
+              @csrf
+            </form>
+          </div>
+          <div id="popup-forgotPassword" style="display: none">
+            <h4>Forgot Password</h4>
+            <form class="aa-login-form" action="" id="userForgotPassword">
+              <label for="">Email<span>*</span></label>
+              <input type="text" name="forgotPasswordEmail" placeholder="Email" required>
+              <div class="forgot_msg"></div>
+              <button class="aa-browse-btn" type="submit" id="btnForgotPassword">Submit</button>
+              <br/><br/>
+              <div class="aa-register-now">
+                <a href="javascript:void(0)" onclick="login()">Login Instead?</a>
+              </div>
+              @csrf
+            </form>
+          </div>
         </div>                        
       </div><!-- /.modal-content -->
     </div><!-- /.modal-dialog -->

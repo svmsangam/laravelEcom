@@ -59,7 +59,7 @@ function getTempUserId(){
 }
 function getCartItems(){
 	if(session()->has('USER_LOGIN')){
-		$uid = session()->get('USER_LOGIN');
+		$uid = session()->get('USER_ID');
 		$user_type = "reg";
 	}else{
 		$uid = getTempUserId();

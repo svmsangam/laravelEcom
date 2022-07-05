@@ -27,6 +27,22 @@ Route::get('category/{slug}',[FrontController::class,'category']);
 Route::get('product/{slug}',[FrontController::class,'product']);
 Route::post('/add_to_cart',[FrontController::class,'add_to_cart']);
 Route::get('cart',[FrontController::class,'cart']);
+Route::get('search/{str}',[FrontController::class,'search']);
+Route::get('register',[FrontController::class,'register']);
+Route::post('user_register_process',[FrontController::class,'userRegister']);
+Route::post('user_login_process',[FrontController::class,'userLogin']);
+Route::get('/logout', function () {
+    session()->forget('USER_LOGIN');
+    session()->forget('USER_ID');
+    session()->forget('USER_NAME');
+    session()->flash('success','Logout Successfully');
+    return redirect('/');
+});
+Route::get('/verification/{rand_id}',[FrontController::class,'verify_email']);
+Route::post('user_forgot_password_process',[FrontController::class,'forgotPassword']);
+Route::get('/password_reset/{rand_id}',[FrontController::class,'password_reset']);
+Route::post('user_reset_password_process',[FrontController::class,'password_reset_process']);
+
 
 //Admin
 Route::get('admin',[AdminController::class,'index']);

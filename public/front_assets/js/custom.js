@@ -240,23 +240,29 @@ jQuery(function($){
     jQuery(function(){
       if($('body').is('.productPage')){
        var skipSlider = document.getElementById('skipstep');
+       var filter_price_start = jQuery('#filter_price_min').val();
+       var filter_price_end = jQuery('#filter_price_max').val();
+       if(filter_price_start == '' || filter_price_end == ''){
+          filter_price_start = 100;
+          filter_price_end = 1000;
+       }
         noUiSlider.create(skipSlider, {
             range: {
                 'min': 0,
-                '10%': 10,
-                '20%': 20,
-                '30%': 30,
-                '40%': 40,
-                '50%': 50,
-                '60%': 60,
-                '70%': 70,
-                '80%': 80,
-                '90%': 90,
-                'max': 100
+                '10%': 100,
+                '20%': 400,
+                '30%': 700,
+                '40%': 1000,
+                '50%': 1300,
+                '60%': 1600,
+                '70%': 1900,
+                '80%': 2200,
+                '90%': 2500,
+                'max': 2700
             },
             snap: true,
             connect: true,
-            start: [20, 70]
+            start: [filter_price_start, filter_price_end]
         });
         // for value print
         var skipValues = [
@@ -426,7 +432,94 @@ function deleteCartItem(pid,size,attr_id){
   jQuery('#cart_item_'+attr_id).remove(); 
 }
 function sortProducts(){
-  sort_by_val= jQuery('#sort_by').val();
+  var sort_by_val= jQuery('#sort_by').val();
   jQuery('#sort').val(sort_by_val);
   jQuery('#categoryFilter').submit();
 }
+function filter_price(){
+  
+  jQuery('#filter_price_min').val(jQuery('#skip-value-lower').html());
+  jQuery('#filter_price_max').val(jQuery('#skip-value-upper').html());
+  jQuery('#categoryFilter').submit();
+
+}
+function prodSearch(){
+  var search_str = jQuery('#search_str').val();
+  if(search_str !='' && search_str.length>3){
+    window.location.href = '/search/'+search_str;
+  }
+}
+jQuery('#userRegisterForm').submit(function (e){
+  e.preventDefault();
+  jQuery('.field_error').html('');
+  jQuery.ajax({
+      url:'user_register_process',
+      data:jQuery('#userRegisterForm').serialize(),
+      type:'post',
+      success:function(result){
+        if(result.status == "error"){
+          jQuery.each(result.error , function(key,val){
+              jQuery('#'+key+'_error').html(val);
+          });
+        }
+        if(result.status == "success"){
+            jQuery('#userRegisterForm')[0].reset();
+            jQuery('.registerSuccess').html(result.msg);
+        }
+      }
+  });
+});
+jQuery('#userLoginForm').submit(function (e){
+  e.preventDefault();
+  jQuery('.login_msg').html('');
+  jQuery.ajax({
+      url:'/user_login_process',
+      data:jQuery('#userLoginForm').serialize(),
+      type:'post',
+      success:function(result){
+        if(result.status == "error"){
+          jQuery('.login_msg').html(result.msg);
+        }
+        if(result.status == "success"){
+          window.location.href = "/";
+        }
+      }
+  });
+});
+function forgotPassword(){
+  jQuery('#popup-forgotPassword').css('display','block');
+  jQuery('#popup-login').hide();
+}
+function login(){
+  jQuery('#popup-forgotPassword').hide();
+  jQuery('#popup-login').show();
+}
+jQuery('#userForgotPassword').submit(function (e){
+  e.preventDefault();
+  jQuery('.forgot_msg').html('');
+  jQuery.ajax({
+      url:'/user_forgot_password_process',
+      data:jQuery('#userForgotPassword').serialize(),
+      type:'post',
+      success:function(result){
+        if(result.status != ""){
+          jQuery('.forgot_msg').html(result.msg);
+        }
+      }
+  });
+});
+jQuery('#userUpdatePassword').submit(function (e){
+  e.preventDefault();
+  jQuery('.passwordUpdate').html('');
+  jQuery.ajax({
+      url:'/user_reset_password_process',
+      data:jQuery('#userUpdatePassword').serialize(),
+      type:'post',
+      success:function(result){
+        if(result.status != ""){
+          jQuery('#userUpdatePassword')[0].reset();
+          jQuery('.passwordUpdate').html(result.msg);
+        }
+      }
+  });
+});

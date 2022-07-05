@@ -1,38 +1,17 @@
 @extends('front.layout')
-@section('title','Category')
+@section('title','Search')
 @section('container')
     
 <section id="aa-product-category">
     <div class="container">
       <div class="row">
-        <div class="col-lg-9 col-md-9 col-sm-8 col-md-push-3">
+        <div class="col-lg-9 col-md-9 col-sm-8">
           <div class="aa-product-catg-content">
-            <div class="aa-product-catg-head">
-              <div class="aa-product-catg-head-left">
-                <form action="" class="aa-sort-form">
-                  <label for="">Sort by</label>
-                  <select name="" onchange="sortProducts()" id="sort_by">
-                    <option value="" selected="Default">Default</option>
-                    <option value="name">Name</option>
-                    <option value="price_lth">Price--Low-to-High</option>
-                    <option value="price_htl">Price--High-to-Low</option>
-                    <option value="date">Date</option>
-                  </select>
-                </form>
-                <div class="aa-product-catg-head-left">
-                  {{$sort_txt}}
-                </div>  
-              </div>
-              <div class="aa-product-catg-head-right">
-                <a id="grid-catg" href="#"><span class="fa fa-th"></span></a>
-                <a id="list-catg" href="#"><span class="fa fa-list"></span></a>
-              </div>
-            </div>
             <div class="aa-product-catg-body">
               <ul class="aa-product-catg">
                 <!-- start single product item -->
-                @if(isset($category_product[0]))
-                @foreach($category_product as $productArr)
+                @if(isset($search_product[0]))
+                @foreach($search_product as $productArr)
                  <li>
                    <figure>
                      <a class="aa-product-img" href="{{url('product/'.$productArr->slug)}}">
@@ -52,7 +31,7 @@
                  @else
                  <li>
                    <figure>
-                     No data found
+                     No product found
                    <figure>
                  <li>
                  @endif                  
@@ -81,7 +60,7 @@
             </div>
           </div>
         </div>
-        <div class="col-lg-3 col-md-3 col-sm-4 col-md-pull-9">
+        {{-- <div class="col-lg-3 col-md-3 col-sm-4 col-md-pull-9">
           <aside class="aa-sidebar">
             <!-- single sidebar -->
             <div class="aa-sidebar-widget">
@@ -120,7 +99,7 @@
 
             </div>
           </aside>
-        </div>
+        </div> --}}
        
       </div>
     </div>
@@ -132,9 +111,4 @@
     <input type="hidden" id="product_id" name="product_id">
     @csrf
   </form>
-  <form id="categoryFilter">
-    <input type="hidden" id="sort" name="sort" value="{{$sort}}">
-    <input type="hidden" id="filter_price_min" name="filter_price_min" value="{{$filter_price_min}}">
-    <input type="hidden" id="filter_price_max" name="filter_price_max" value="{{$filter_price_max}}">
-  </form>       
 @endsection
