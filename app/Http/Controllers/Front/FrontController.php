@@ -124,7 +124,7 @@ class FrontController extends Controller
 
     public function add_to_cart(Request $request){
         if($request->session()->has('USER_LOGIN')){
-            $uid = $request->session()->get('USER_LOGIN');
+            $uid = $request->session()->get('USER_ID');
             $user_type = "reg";
         }else{
             $uid = getTempUserId();
@@ -186,7 +186,7 @@ class FrontController extends Controller
 
    public function cart(Request $request){
     if($request->session()->has('USER_LOGIN')){
-        $uid = $request->session()->get('USER_LOGIN');
+        $uid = $request->session()->get('USER_ID');
         $user_type = "reg";
     }else{
         $uid = getTempUserId();
@@ -367,6 +367,16 @@ class FrontController extends Controller
                 $request->session()->put('USER_NAME',$result[0]->name);
                 $status = 'success';
                 $msg = '';
+                $getUserTempId = getTempUserId();
+                DB::table('carts')
+                ->where(['user_id'=>$getUserTempId])
+                ->where(['user_type'=>'nonReg'])
+                ->update(
+                    [
+                        'user_id'=>$result[0]->id,
+                        'user_type'=>'reg'
+                    ]
+                );  
             }else{
                 $status = 'error';
                 $msg = 'Invalid Credentials';
@@ -436,5 +446,99 @@ class FrontController extends Controller
             ]
         );
         return response()->json(['status'=>'success','msg'=>'Password changed.']);              
+    }
+    public function checkout(Request $request){
+        $result['cart_data'] = getCartItems();
+        if(isset($result['cart_data'][0])){ 
+            if($request->session()->has('USER_LOGIN')){
+                $uid = $request->session()->get('USER_ID');
+                $customer = DB::table('customers')
+                ->where(['id'=>$uid])
+                ->get();
+                $result['customers']['name'] = $customer[0]->name;
+                $result['customers']['email'] = $customer[0]->email;
+                $result['customers']['mobile'] = $customer[0]->mobile;
+                $result['customers']['address'] = $customer[0]->address;
+                $result['customers']['city'] = $customer[0]->city;
+
+            }else{
+                $result['customers']['name'] ='';
+                $result['customers']['email'] = '';
+                $result['customers']['mobile'] = '';
+                $result['customers']['address'] = '';
+                $result['customers']['city'] ='';
+            }
+            return view('front.checkout',$result);
+        }else{
+           return redirect('/');
+        }        
+    }
+    public function apply_coupon_code(Request $request){
+        $totalPrice = 0;
+        $result = DB::table('coupons')
+        ->where(['code'=>$request->coupon_code])
+        ->get();
+        if(isset($result[0])){
+            $value = $result[0]->value;
+            $type = $result[0]->type;
+            if($result[0]->status==1){
+                if($result[0]->is_one_time==1){
+                    $status = 'error';
+                    $msg = 'Coupon already used';
+                }else{
+                    $min_order_amt = $result[0]->min_order_amt;
+                    if($min_order_amt>0){
+                        $getCartItems = getCartItems();
+                        foreach($getCartItems as $list){
+                            $totalPrice = $totalPrice+($list->qty*$list->price);
+                        }
+                        if($min_order_amt<$totalPrice){
+                            $status = 'success';
+                            $msg = 'Coupon Applied'; 
+                        }else{
+                            $status = 'error';
+                            $msg = 'Mininum order amount for this coupon is '.$min_order_amt; 
+                        }
+                    }else{
+                        $getCartItems = getCartItems();
+                        foreach($getCartItems as $list){
+                            $totalPrice = $totalPrice+($list->qty*$list->price);
+                        }
+                        $status = 'success';
+                        $msg = 'Coupon Applied'; 
+                    }
+                }
+        }else{
+            $status = 'error';
+            $msg = 'Coupon Expired';
+        }
+           // $status = 'success';
+            // $msg = ' Valid Coupon';            
+        }else{
+            $status = 'error';
+            $msg = 'Invalid Coupon';
+        }
+        if($status == 'success'){
+            if($type=='val'){
+                $totalPrice = $totalPrice-$value;
+            }
+            if($type=='per'){
+                $perValue = ($value/100)*$totalPrice;
+                $totalPrice = $totalPrice-$perValue;
+            }
+        }
+        return response()->json(['status'=>$status,'msg'=>$msg,'totalPrice'=>$totalPrice]); 
+    }
+    public function remove_coupon_code(Request $request){
+        $totalPrice = 0;
+        // $result = DB::table('coupons')
+        // ->where(['code'=>$request->coupon_code])
+        // ->get();
+        $getCartItems = getCartItems();
+        foreach($getCartItems as $list){
+            $totalPrice = $totalPrice+($list->qty*$list->price);
+        }        
+     
+        return response()->json(['status'=>'success','msg'=>'Coupon Removed','totalPrice'=>$totalPrice]); 
     }
 }

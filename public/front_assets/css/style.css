@@ -4202,3 +4202,25 @@ img {
 .forgot_msg{
   color:#ff6666;  
 }
+.cart_size{
+  font-size: 14px;
+  color: #a5d549;
+  font-weight: bold;
+}
+#coupon_code_msg{
+  font-size: 14px;
+  color: #ff6666;
+}
+.coupon_code input {
+  border: 1px solid #ccc;
+  height: 40px;
+  padding: 10px;
+  width: 100%;
+}
+.hide{
+  display: none;
+}
+/* .cc_remove{
+  color: #ff6666;
+  font-size: 10px;
+} */

@@ -42,6 +42,9 @@ Route::get('/verification/{rand_id}',[FrontController::class,'verify_email']);
 Route::post('user_forgot_password_process',[FrontController::class,'forgotPassword']);
 Route::get('/password_reset/{rand_id}',[FrontController::class,'password_reset']);
 Route::post('user_reset_password_process',[FrontController::class,'password_reset_process']);
+Route::get('checkout',[FrontController::class,'checkout']);
+Route::post('apply_coupon_code',[FrontController::class,'apply_coupon_code']);
+Route::post('remove_coupon_code',[FrontController::class,'remove_coupon_code']);
 
 
 //Admin

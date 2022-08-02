@@ -481,7 +481,7 @@ jQuery('#userLoginForm').submit(function (e){
           jQuery('.login_msg').html(result.msg);
         }
         if(result.status == "success"){
-          window.location.href = "/";
+          window.location.href =  window.location.href;
         }
       }
   });
@@ -523,3 +523,55 @@ jQuery('#userUpdatePassword').submit(function (e){
       }
   });
 });
+function applyCouponCode(){
+  jQuery('#coupon_code_msg').html('');
+  var coupon_code = jQuery('#coupon_code').val();
+
+  if(coupon_code!=''){
+    jQuery.ajax({
+      type:'post',
+      url:'/apply_coupon_code',
+      data:'coupon_code='+coupon_code+'&_token='+jQuery("[name='_token']").val(),
+      success:function(res){
+        if(res.status == 'success'){
+          jQuery('.apply_coupon_code_box').hide();
+          jQuery('#coupon_code_msg').css('color','#a5d549');
+          jQuery('.show_coupon_box').removeClass('hide');
+          jQuery('#coupon_code_str').html(coupon_code);
+          jQuery('#total_price').html('NPR '+res.totalPrice)
+          jQuery('#coupon_code_msg').html(res.msg);
+        }else{
+          jQuery('#coupon_code_msg').css('color','#ff6666');
+          jQuery('#coupon_code_msg').html(res.msg);
+        }
+      }
+    })
+  }else{
+    jQuery('#coupon_code_msg').html('Please eneter a coupon code');
+  }
+}
+function removeCouponCode(){
+  jQuery('#coupon_code_msg').html('');
+  var coupon_code = jQuery('#coupon_code').val();
+  if(coupon_code!=''){
+    jQuery.ajax({
+      type:'post',
+      url:'/remove_coupon_code',
+      data:'coupon_code='+coupon_code+'&_token='+jQuery("[name='_token']").val(),
+      success:function(res){
+        if(res.status == 'success'){
+          jQuery('#coupon_code').val('');
+          jQuery('.apply_coupon_code_box').show();
+          jQuery('#coupon_code_msg').css('color','#a5d549');
+          jQuery('.show_coupon_box').addClass('hide');
+          jQuery('#coupon_code_str').html('');
+          jQuery('#total_price').html('NPR '+res.totalPrice)
+          jQuery('#coupon_code_msg').html(res.msg);
+        }else{
+          jQuery('#coupon_code_msg').css('color','#ff6666');
+          jQuery('#coupon_code_msg').html(res.msg);
+        }
+      }
+    });
+  }
+}
