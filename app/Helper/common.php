@@ -77,4 +77,63 @@ function getCartItems(){
     ->get();
 	return $result['cartList'];
 }
+function apply_coupon_code($coupon_code){
+	$totalPrice = 0;
+        $result = DB::table('coupons')
+        ->where(['code'=>$coupon_code])
+        ->get();
+        if(isset($result[0])){
+            $value = $result[0]->value;
+            $type = $result[0]->type;
+            if($result[0]->status==1){
+                if($result[0]->is_one_time==1){
+                    $status = 'error';
+                    $msg = 'Coupon already used';
+                }else{
+                    $min_order_amt = $result[0]->min_order_amt;
+                    if($min_order_amt>0){
+                        $getCartItems = getCartItems();
+                        foreach($getCartItems as $list){
+                            $totalPrice = $totalPrice+($list->qty*$list->price);
+                        }
+                        if($min_order_amt<$totalPrice){
+                            $status = 'success';
+                            $msg = 'Coupon Applied'; 
+                        }else{
+                            $status = 'error';
+                            $msg = 'Mininum order amount for this coupon is '.$min_order_amt; 
+                        }
+                    }else{
+                        $getCartItems = getCartItems();
+                        foreach($getCartItems as $list){
+                            $totalPrice = $totalPrice+($list->qty*$list->price);
+                        }
+                        $status = 'success';
+                        $msg = 'Coupon Applied'; 
+                    }
+                }
+        }else{
+            $status = 'error';
+            $msg = 'Coupon Expired';
+        }
+           // $status = 'success';
+            // $msg = ' Valid Coupon';            
+        }else{
+            $status = 'error';
+            $msg = 'Invalid Coupon';
+        }
+		$coupon_code_value = 0;
+        if($status == 'success'){
+            if($type=='val'){
+                $totalPrice = $totalPrice-$value;
+				$coupon_code_value = $value;
+            }
+            if($type=='per'){
+                $perValue = ($value/100)*$totalPrice;
+                $totalPrice = $totalPrice-$perValue;
+				$coupon_code_value = $perValue;
+            }
+        }
+        return json_encode(['status'=>$status,'msg'=>$msg,'totalPrice'=>$totalPrice,'coupon_code_value'=>$coupon_code_value]); 
+}
 ?>

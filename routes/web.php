@@ -45,7 +45,10 @@ Route::post('user_reset_password_process',[FrontController::class,'password_rese
 Route::get('checkout',[FrontController::class,'checkout']);
 Route::post('apply_coupon_code',[FrontController::class,'apply_coupon_code']);
 Route::post('remove_coupon_code',[FrontController::class,'remove_coupon_code']);
-
+Route::post('place_order',[FrontController::class,'place_order']);
+Route::get('order_placed',[FrontController::class,'order_placed']);
+Route::post('khalti/payment/verify',[FrontController::class,'payment_verification']);
+Route::post('khalti/store/payment',[FrontController::class,'store_order_gateway_payment']);
 
 //Admin
 Route::get('admin',[AdminController::class,'index']);

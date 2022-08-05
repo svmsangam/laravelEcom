@@ -474,60 +474,12 @@ class FrontController extends Controller
         }        
     }
     public function apply_coupon_code(Request $request){
-        $totalPrice = 0;
-        $result = DB::table('coupons')
-        ->where(['code'=>$request->coupon_code])
-        ->get();
-        if(isset($result[0])){
-            $value = $result[0]->value;
-            $type = $result[0]->type;
-            if($result[0]->status==1){
-                if($result[0]->is_one_time==1){
-                    $status = 'error';
-                    $msg = 'Coupon already used';
-                }else{
-                    $min_order_amt = $result[0]->min_order_amt;
-                    if($min_order_amt>0){
-                        $getCartItems = getCartItems();
-                        foreach($getCartItems as $list){
-                            $totalPrice = $totalPrice+($list->qty*$list->price);
-                        }
-                        if($min_order_amt<$totalPrice){
-                            $status = 'success';
-                            $msg = 'Coupon Applied'; 
-                        }else{
-                            $status = 'error';
-                            $msg = 'Mininum order amount for this coupon is '.$min_order_amt; 
-                        }
-                    }else{
-                        $getCartItems = getCartItems();
-                        foreach($getCartItems as $list){
-                            $totalPrice = $totalPrice+($list->qty*$list->price);
-                        }
-                        $status = 'success';
-                        $msg = 'Coupon Applied'; 
-                    }
-                }
-        }else{
-            $status = 'error';
-            $msg = 'Coupon Expired';
-        }
-           // $status = 'success';
-            // $msg = ' Valid Coupon';            
-        }else{
-            $status = 'error';
-            $msg = 'Invalid Coupon';
-        }
-        if($status == 'success'){
-            if($type=='val'){
-                $totalPrice = $totalPrice-$value;
-            }
-            if($type=='per'){
-                $perValue = ($value/100)*$totalPrice;
-                $totalPrice = $totalPrice-$perValue;
-            }
-        }
-        return response()->json(['status'=>$status,'msg'=>$msg,'totalPrice'=>$totalPrice]); 
+        $arr = apply_coupon_code($request->coupon_code);
+        $arr = json_decode($arr,true);
+        
+        return response()->json(['status'=>$arr['status'],'msg'=>$arr['msg'],'totalPrice'=>$arr['totalPrice']]);
+
+ 
     }
     public function remove_coupon_code(Request $request){
         $totalPrice = 0;
@@ -540,5 +492,178 @@ class FrontController extends Controller
         }        
      
         return response()->json(['status'=>'success','msg'=>'Coupon Removed','totalPrice'=>$totalPrice]); 
+    }
+    public function place_order(Request $request){
+        $totalPrice = 0;
+        $coupon_value = 0;
+        $productDetailArr = [];
+        if($request->session()->has('USER_LOGIN')){
+            $uid = $request->session()->get('USER_ID');
+
+            if($request->coupon_code !== null){
+                $arr = apply_coupon_code($request->coupon_code);
+                $arr = json_decode($arr,true);
+                if($arr['status'] == 'success'){
+                        $coupon_value = $arr['coupon_code_value'];
+                }else{
+                    return response()->json(['status'=>'error','msg'=>$arr['msg']]);            
+                }
+            }
+            $getCartItems = getCartItems();
+            foreach($getCartItems as $list){
+                $totalPrice = $totalPrice+($list->qty*$list->price)-$coupon_value;
+            }
+            if($request->payment_type=="COD"){
+            $arr = [
+                "customer_id"=>$uid,
+                "name"=>$request->name,
+                "email"=>$request->email,
+                "mobile"=>$request->mobile,
+                "address"=>$request->address,
+                "city"=>$request->city,
+                "coupon_code"=>$request->coupon_code,
+                "coupon_value"=>$coupon_value,
+                "order_status"=>1,
+                "payment_type"=>$request->payment_type,
+                "payment_status"=>"Pending",
+                "payment_id"=>0,
+                "total_amt"=>$totalPrice,
+                "added_on"=>date('Y-m-d h:i:s'),
+            ];
+            $order_id = DB::table('orders')->insertGetId($arr);
+            if($order_id>0){
+            $i = 0;  
+            foreach($getCartItems as $list1){
+                $productDetailArr[$i]['order_id'] = $order_id;
+                $productDetailArr[$i]['product_id'] = $list1->pid;
+                $productDetailArr[$i]['product_attr_id'] = $list1->attrId;
+                $productDetailArr[$i]['price'] = $list1->price;
+                $productDetailArr[$i]['qty'] = $list1->qty;               
+                $i++;
+
+            }
+            DB::table('order_details')->insert($productDetailArr); 
+            
+            DB::table('carts')->where(['user_id'=>$uid,'user_type'=>'reg'])->delete();
+            $request->session()->put('ORDER_ID',$order_id);
+            $status = "success";
+            $msg = "Order Placed";
+            }
+            return response()->json(['status'=>$status,'msg'=>$msg]);    
+        }if($request->payment_type == 'Gateway'){
+            $arr = [
+                "customer_id"=>$uid,
+                "name"=>$request->name,
+                "email"=>$request->email,
+                "mobile"=>$request->mobile,
+                "address"=>$request->address,
+                "city"=>$request->city,
+                "coupon_code"=>$request->coupon_code,
+                "coupon_value"=>$coupon_value,
+                "order_status"=>2,
+                "payment_type"=>$request->payment_type,
+                "payment_status"=>"Pending",
+                "payment_id"=>0,
+                "total_amt"=>$totalPrice,
+                "added_on"=>date('Y-m-d h:i:s'),
+            ];
+            return response()->json(['status'=>'khalti','msg'=>'Gateway payment','totalAmt'=>$totalPrice,
+            'order_details'=>$arr]);         
+        }
+        else{
+            $status = "error";
+            $msg = "Failed to place order";
+        }
+            // prx($productDetailArr);         
+        }else{
+            return response()->json(['status'=>'error','msg'=>'Please login first!!!']);;  
+            // return redirect('')
+        }
+        return response()->json(['status'=>$status,'msg'=>$msg]);
+    }
+    public function order_placed(Request $request){
+        if($request->session()->has('ORDER_ID')){
+            return view('front.order_placed');
+            session()->forget('ORDER_ID');
+        }else{
+            return redirect('/');
+        }
+    }
+    public function payment_verification(Request $request){
+        $token = $request->token;
+        $amt = 0;
+        $orderInfo = array_values($request->order_info);
+        // prx($orderInfo[12]);
+        $amt = $orderInfo[12]*100;
+        $args = http_build_query(array(
+            'token' => $token,
+            'amount'  => $amt
+        ));
+        
+        $url = "https://khalti.com/api/v2/payment/verify/";
+        
+        # Make the call using API.
+        $ch = curl_init();
+        curl_setopt($ch, CURLOPT_URL, $url);
+        // curl_setopt($ch,CURLOPT_SSL_VERIFYPEER,FALSE );
+        curl_setopt($ch, CURLOPT_POST, 1);
+        curl_setopt($ch, CURLOPT_POSTFIELDS,$args);
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+        
+        $headers = ['Authorization: Key test_secret_key_f541316303304235ad569ba174ce0baf'];
+        curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
+        
+        // Response
+        $response = curl_exec($ch);
+        $status_code = curl_getinfo($ch, CURLINFO_HTTP_CODE);
+        curl_close($ch);
+        if($status_code == 200){
+            return response()->json(['status'=>'success' ,'msg'=>'Payment successful']);
+        }else{
+            return response()->json(['status'=>'error','msg'=>'Payment failed. Try again']);
+        }
+        
+    }
+    public function store_order_gateway_payment(Request $request){
+        $getCartItems = getCartItems();
+        $uid = $request->session()->get('USER_ID');
+        $orderInfo = $request->order_info;
+        $arr = [
+            "customer_id"=>$uid,
+            "name"=>$orderInfo['name'],
+            "email"=>$orderInfo['email'],
+            "mobile"=>$orderInfo['mobile'],
+            "address"=>$orderInfo['address'],
+            "city"=>$orderInfo['city'],
+            "coupon_code"=>$orderInfo['coupon_code'],
+            "coupon_value"=>$orderInfo['coupon_value'],
+            "order_status"=>1,
+            "payment_type"=>strtolower($orderInfo['payment_type']),
+            "payment_status"=>"success",
+            "payment_id"=>$request->payment_id,
+            "total_amt"=>$orderInfo['total_amt'],
+            "added_on"=>$orderInfo['added_on'],
+        ];
+       
+        $order_id = DB::table('orders')->insertGetId($arr);
+        if($order_id>0){
+        $i = 0;  
+        foreach($getCartItems as $list1){
+            $productDetailArr[$i]['order_id'] = $order_id;
+            $productDetailArr[$i]['product_id'] = $list1->pid;
+            $productDetailArr[$i]['product_attr_id'] = $list1->attrId;
+            $productDetailArr[$i]['price'] = $list1->price;
+            $productDetailArr[$i]['qty'] = $list1->qty;               
+            $i++;
+
+        }
+        DB::table('order_details')->insert($productDetailArr); 
+        
+        DB::table('carts')->where(['user_id'=>$uid,'user_type'=>'reg'])->delete();
+        $request->session()->put('ORDER_ID',$order_id);
+        $status = "success";
+        $msg = "Order Placed";
+        return response()->json(['status'=>$status,'msg'=>$msg]);
+        }
     }
 }

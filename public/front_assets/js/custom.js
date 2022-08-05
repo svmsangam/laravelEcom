@@ -426,7 +426,7 @@ function updateQty(pid,size,attr_id,price){
 }
 function deleteCartItem(pid,size,attr_id){
   jQuery('#size_id').val(size);
-  var qty = jQuery('#qty'+attr_id).val();
+  // var qty = jQuery('#qty'+attr_id).val();
   jQuery('#qty').val(0);
   add_to_cart(pid,size);
   jQuery('#cart_item_'+attr_id).remove(); 
@@ -525,6 +525,7 @@ jQuery('#userUpdatePassword').submit(function (e){
 });
 function applyCouponCode(){
   jQuery('#coupon_code_msg').html('');
+  jQuery('#order_place_msg').html('');
   var coupon_code = jQuery('#coupon_code').val();
 
   if(coupon_code!=''){
@@ -570,8 +571,96 @@ function removeCouponCode(){
         }else{
           jQuery('#coupon_code_msg').css('color','#ff6666');
           jQuery('#coupon_code_msg').html(res.msg);
+          jQuery('#coupon_code').val('');
         }
       }
     });
   }
+}
+jQuery('#frmPlaceOrder').submit(function (e){
+  e.preventDefault();
+  jQuery('#order_place_msg').html("Please wait...")
+  var payment_type = jQuery('input[name=payment_type]:checked', '#frmPlaceOrder').val(); 
+  jQuery.ajax({
+      url:'/place_order',
+      data:jQuery('#frmPlaceOrder').serialize(),
+      type:'post',
+      success:function(result){
+          if(result.status == "success"){
+              window.location.href = "/order_placed";
+              jQuery('#order_place_msg').html(result.msg);
+          }
+          if(result.status == "error"){
+            jQuery('#order_place_msg').html(result.msg);
+          }
+         if(result.status == "khalti"){
+          pay_with_khalti(result.totalAmt,result.order_details);
+         }
+        }
+      
+  });
+});
+function pay_with_khalti(totalAmt,order_details){
+  var config = {
+      // replace the publicKey with yours
+      "publicKey": "test_public_key_30c12c3272744045b36db2c0c3321e21",
+      "productIdentity": "1234567890",
+      "productName": "Dragon",
+      "productUrl": "http://gameofthrones.wikia.com/wiki/Dragons",
+      "paymentPreference": [
+          "KHALTI",
+          ],
+      "eventHandler": {
+          onSuccess (payload) {
+              //hit merchant api for initiating verfication
+              jQuery.ajax({
+                type:'POST',
+                url:'/khalti/payment/verify',
+                data:{
+                  token: payload.token,
+                  amount: payload.amount,
+                  payment_id: payload.idx,
+                  mobile: payload.mobile, 
+                  order_info:order_details,
+                  '_token':jQuery("[name='_token']").val()
+                },
+                success:function(result){
+                  if(result.status == "success"){
+                      // window.location.href = "/order_placed";
+                      jQuery('#order_place_msg').html(result.msg);
+                      jQuery.ajax({
+                        type:'POST',
+                          url:'/khalti/store/payment',
+                          data:{
+                            payment_id: payload.idx,
+                            order_info:order_details,
+                            '_token':jQuery("[name='_token']").val()
+                          },
+                          success:function(result){
+                            if(result.status == "success"){
+                                window.location.href = "/order_placed";
+                                
+                            }
+                          }
+                      });
+                  }
+                 if(result.status == "error"){
+                  jQuery('#order_place_msg').html(result.msg);
+                 }
+                }
+              });
+              // console.log(order_details);
+              // console.log(payload);
+          },
+          onError (error) {
+              console.log(error);
+          },
+          onClose () {
+              console.log('widget is closing');
+          }
+      }
+  };
+
+  var checkout = new KhaltiCheckout(config);
+  checkout.show({amount: (totalAmt*100)});
 }

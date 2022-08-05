@@ -31,7 +31,7 @@
     <!-- Google Font -->
     <link href='https://fonts.googleapis.com/css?family=Lato' rel='stylesheet' type='text/css'>
     <link href='https://fonts.googleapis.com/css?family=Raleway' rel='stylesheet' type='text/css'>
-    
+    <script src="https://khalti.s3.ap-south-1.amazonaws.com/KPG/dist/2020.12.17.0.0.0/khalti-checkout.iffe.js"></script>
 
     <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
     <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
@@ -115,10 +115,9 @@
               <!-- / header top left -->
               <div class="aa-header-top-right">
                 <ul class="aa-head-top-nav-right">
-                  <li><a href="javascript:void(0)">My Account</a></li>
-                  <li class="hidden-xs"><a href="javascript:void(0)">Wishlist</a></li>
+                  <li><a href="javascript:void(0)">My Orders</a></li>
+                  {{-- <li class="hidden-xs"><a href="javascript:void(0)">Wishlist</a></li> --}}
                   <li class="hidden-xs"><a href="{{url('/cart')}}">My Cart</a></li>
-                  <li class="hidden-xs"><a href="javascript:void(0)">Checkout</a></li>
                   @if (session()->has('USER_LOGIN')!=null)
                   <li><a href="{{url('/logout')}}">Logout</a></li>
                   @else
