@@ -131,24 +131,30 @@
                  </div>
                  <div class="tab-pane fade " id="review">
                   <div class="aa-product-review-area">
-                    <h4>2 Reviews for T-Shirt</h4> 
+                    @if(isset($product_review[0]))    
+                    <h4>
+                    @php  
+                       echo count($product_review);
+                    @endphp
+                     Review(s) for {{$product[0]->name}}</h4> 
                     <ul class="aa-review-nav">
+                      @foreach($product_review as $list)
                       <li>
                          <div class="media">
-                           <div class="media-left">
-                             <a href="#">
-                               <img class="media-object" src="img/testimonial-img-3.jpg" alt="girl image">
-                             </a>
-                           </div>
                            <div class="media-body">
-                             <h4 class="media-heading"><strong>Marla Jobs</strong> - <span>March 26, 2016</span></h4>
+                             <h4 class="media-heading"><strong>{{$list->name}}</strong> - <span>{{getCustomDate($list->added_on)}}</span></h4>
                              <div class="aa-product-rating">
+                               <span class="rating_txt">{{$list->rating}}</span>
                              </div>
-                             <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit.</p>
+                             <p>{{$list->review}}</p>
                            </div>
                          </div>
                        </li>
+                       @endforeach
                     </ul>
+                    @else
+                         <h2>No review found</h2>
+                       @endif
                     <form id="frmProductReview" class="aa-review-form">
                     <h4>Add a review</h4>
                     <div class="aa-your-rating">
@@ -171,6 +177,7 @@
                        <input type="hidden" name="product_id" value="{{$product[0]->id}}" />
                        @csrf
                     </form>
+                    <div class="review_msg"></div>
                   </div>
                  </div>            
                </div>

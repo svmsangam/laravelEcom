@@ -115,7 +115,16 @@ class FrontController extends Controller
             ->leftJoin('colors','colors.id','=','product_attrib.color_id')
             ->leftJoin('flavours','flavours.id','=','product_attrib.flavour_id')
             ->where(['product_attrib.product_id'=>$list1->id])->get();
-        }     
+        }  
+        
+        $result['product_review']=
+        DB::table('product_review')
+        ->leftJoin('customers','customers.id','=','product_review.customer_id')
+        ->where(['product_review.product_id'=>$result['product'][0]->id])
+        ->where(['product_review.status'=>1])
+        ->orderBy('product_review.added_on','desc')
+        ->select('product_review.rating','product_review.review','product_review.added_on','customers.name')
+        ->get();
             // echo"<pre>";
             // print_r($result['product_images']);
             // die(); 
@@ -123,6 +132,8 @@ class FrontController extends Controller
     }
 
     public function add_to_cart(Request $request){
+        $SKU = '';
+        $finalAvailable = 0;
         if($request->session()->has('USER_LOGIN')){
             $uid = $request->session()->get('USER_ID');
             $user_type = "reg";
@@ -133,12 +144,22 @@ class FrontController extends Controller
         $size = $request->post('size_id');
         $qty = $request->post('productQty');
         $productId = $request->post('product_id');
+
+
         $result = DB::table('product_attrib')
         ->select('product_attrib.id')
         ->leftJoin('sizes','sizes.id','=','product_attrib.size_id')
         ->where(['product_id'=>$productId])
         ->where(['sizes.size'=>$size])->get();
         $product_attrib_id = $result[0]->id;
+
+        $getAvailableStockQty = getAvaliableQty($productId,$product_attrib_id); 
+
+        $finalAvailable=$getAvailableStockQty[0]->pqty - $getAvailableStockQty[0]->qty;
+        if($qty>$finalAvailable){
+            return response()->json(['msg'=>"not_avaliable",'data'=>"Only $finalAvailable left"]);
+        }
+
         $check = DB::table('carts')
                 ->where(['user_id'=>$uid])
                 ->where(['user_type'=>$user_type])
@@ -153,8 +174,20 @@ class FrontController extends Controller
                 ->delete();
                 $msg = "Deleted";
             }else{
-                DB::table('carts')->where(['id'=>$update_id])
+                 DB::table('carts')->where(['id'=>$update_id])
                 ->update(['qty'=>$qty]);
+                    $SKU=  DB::table('product_attrib')
+                    ->where(['product_attrib.product_id'=>$productId])
+                    ->where(['product_attrib.id' =>$product_attrib_id])
+                    ->select('product_attrib.sku','product_attrib.quantity')
+                    ->get();
+                    $remainingStock = $SKU[0]->quantity - $qty;
+                    DB::table('product_attrib')
+                    ->where(['sku'=>$SKU[0]->sku])
+                    ->update([
+                        'product_attrib.quantity'=>$remainingStock
+                    ]);
+
                 $msg = "Updated";
             }
         }else{
@@ -166,11 +199,22 @@ class FrontController extends Controller
                 'qty'=>$qty,
                 'added_on'=>date('Y-m-d h:i:s')
             ]);
+            if($id>0){
+                $SKU=  DB::table('product_attrib')
+                 ->where(['product_attrib.product_id'=>$productId])
+                 ->where(['product_attrib.id' =>$product_attrib_id])
+                 ->select('product_attrib.sku','product_attrib.quantity')
+                 ->get();
+                $remainingStock = $SKU[0]->quantity - $qty;
+                DB::table('product_attrib')
+                ->where(['sku'=>$SKU[0]->sku])
+                ->update([
+                    'product_attrib.quantity'=>$remainingStock
+                ]);
+            }
             $msg = "Added";
-        }        
-        // echo "<pre>";
-        // print_r($product_attrib_id);
-        // die();
+        }         
+
         $result = DB::table('carts')
         ->leftJoin('products','products.id','=','carts.product_id')
         ->leftJoin('product_attrib','product_attrib.id','=','carts.product_attr_id')
@@ -695,6 +739,26 @@ class FrontController extends Controller
         return view('front.order_detail',$result);
     }
     public function product_review_process(Request $request){
-        prx($_POST);
+        if($request->session()->has('USER_LOGIN')){
+            $uid = $request->session()->get('USER_ID');
+            // prx($_POST);
+            $arr=[
+                "rating"=>$request->rating,
+                "review"=>$request->review,
+                "product_id"=>$request->product_id,
+                "status"=>1,
+                "customer_id"=>$uid,
+                "added_on"=>date('Y-m-d h:i:s')
+            ];
+            $query=DB::table('product_review')->insert($arr);
+
+            $status = "success";
+            $msg = "Thank you for the review!!!";
+        }else{
+            $status = "error";
+            $msg = "Order Placed";
+            $request->session()->flash('error','Please login first.');
+        }
+        return response()->json(['status'=>$status,'msg'=>$msg]);
     }
 }

@@ -413,6 +413,7 @@ function add_to_cart(id,size_str){
            html+='</ul><a class="aa-cartbox-checkout aa-primary-btn" href="cart">Cart</a>';
            jQuery('.aa-cartbox-summary').html(html);
           }
+          // console.log(result);
         }
      });
   }
@@ -665,19 +666,23 @@ function pay_with_khalti(totalAmt,order_details){
   checkout.show({amount: (totalAmt*100)});
 }
 jQuery('#frmProductReview').submit(function (e){
+  jQuery('.review_msg').html('');
   e.preventDefault();
   jQuery.ajax({
       url:'/product/review',
       data:jQuery('#frmProductReview').serialize(),
       type:'post',
       success:function(result){
-          // if(result.status == "success"){
-          //     window.location.href = "/order_placed";
-          //     jQuery('#order_place_msg').html(result.msg);
-          // }
-          // if(result.status == "error"){
-          //   jQuery('#order_place_msg').html(result.msg);
-          // }
+          if(result.status == "success"){
+            jQuery('.review_msg').html(result.msg);
+            jQuery('#frmProductReview')[0].reset();
+            setInterval(function(){
+              window.location.href = window.location.href;
+            },3000);  
+          }
+          if(result.status == "error"){
+            window.location.href = "/";
+          }
           console.log(result);
         }      
   });

@@ -136,4 +136,21 @@ function apply_coupon_code($coupon_code){
         }
         return json_encode(['status'=>$status,'msg'=>$msg,'totalPrice'=>$totalPrice,'coupon_code_value'=>$coupon_code_value]); 
 }
+function getCustomDate($date){
+	if($date!=''){
+		$date=strtotime($date);
+		return date('d-M Y',$date);
+	}
+}
+function getAvaliableQty($product_id,$attr_id){
+	$result=DB::table('order_details')
+            ->leftJoin('orders','orders.id','=','order_details.order_id')
+			->leftJoin('product_attrib','product_attrib.id','=','order_details.product_attr_id')
+            ->where(['order_details.product_id'=>$product_id])
+            ->where(['order_details.product_attr_id'=>$attr_id])
+            ->select('order_details.qty','product_attrib.quantity as pqty')
+            ->get();
+
+	return $result;
+}
 ?>

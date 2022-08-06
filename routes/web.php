@@ -9,6 +9,7 @@ use App\Http\Controllers\Admin\FlavourController;
 use App\Http\Controllers\Admin\HomeBannerController;
 use App\Http\Controllers\Admin\OrderController;
 use App\Http\Controllers\Admin\ProductController;
+use App\Http\Controllers\Admin\ProductReviewController;
 use App\Http\Controllers\Admin\SizeController;
 use App\Http\Controllers\Front\FrontController;
 
@@ -55,6 +56,9 @@ Route::get('/order',[FrontController::class,'getOrder']);
 Route::get('/order_detail/{id}',[FrontController::class,'getOrderDetails']);
 Route::get('checkout',[FrontController::class,'checkout']);
 });
+
+
+
 //Admin
 Route::get('admin',[AdminController::class,'index']);
 Route::post('admin/auth',[AdminController::class,'auth'])->name('admin.auth');
@@ -143,4 +147,7 @@ Route::group(['middleware'=>'admin_auth'],function(){
     Route::get('admin/update_order_status/{status}/{id}',[OrderController::class,'update_order_status']);
 
 
+    //Product Review
+    Route::get('admin/product_review',[ProductReviewController::class,'index']);
+    Route::get('admin/update_product_review_status/{status}/{id}',[ProductReviewController::class,'update_product_review_status']);
 });

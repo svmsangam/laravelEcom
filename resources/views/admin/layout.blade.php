@@ -87,6 +87,10 @@
                             <a href="{{url('admin/order')}}">
                                 <i class="fas fa-shopping-basket"></i>Order</a>
                         </li>
+                        <li class="@yield('product_review_select')">
+                            <a href="{{url('admin/product_review')}}">
+                            <i class="fas fa-star"></i>Product Review</a>
+                        </li>
                     </ul>
                 </div>
             </nav>
@@ -144,6 +148,10 @@
                     <li class="@yield('order_select')">
                         <a href="{{url('admin/order')}}">
                             <i class="fas fa-shopping-basket"></i>Order</a>
+                    </li>
+                    <li class="@yield('product_review_select')">
+                        <a href="{{url('admin/product_review')}}">
+                        <i class="fas fa-star"></i>Product Review</a>
                     </li>
                     </ul>
                 </nav>
