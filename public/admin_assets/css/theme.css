@@ -14652,3 +14652,15 @@ section {
 .mb20{
     margin-bottom:20px;
 }
+.order_detail img{
+    width:100px;
+}
+.whitebg{
+    background-color: white;
+    padding: 30px;
+}
+.order_operation{
+    margin-top: 15px;
+    background-color: white;
+    padding: 30px;
+}

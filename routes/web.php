@@ -7,6 +7,7 @@ use App\Http\Controllers\Admin\CouponController;
 use App\Http\Controllers\Admin\CustomerController;
 use App\Http\Controllers\Admin\FlavourController;
 use App\Http\Controllers\Admin\HomeBannerController;
+use App\Http\Controllers\Admin\OrderController;
 use App\Http\Controllers\Admin\ProductController;
 use App\Http\Controllers\Admin\SizeController;
 use App\Http\Controllers\Front\FrontController;
@@ -42,14 +43,18 @@ Route::get('/verification/{rand_id}',[FrontController::class,'verify_email']);
 Route::post('user_forgot_password_process',[FrontController::class,'forgotPassword']);
 Route::get('/password_reset/{rand_id}',[FrontController::class,'password_reset']);
 Route::post('user_reset_password_process',[FrontController::class,'password_reset_process']);
-Route::get('checkout',[FrontController::class,'checkout']);
 Route::post('apply_coupon_code',[FrontController::class,'apply_coupon_code']);
 Route::post('remove_coupon_code',[FrontController::class,'remove_coupon_code']);
 Route::post('place_order',[FrontController::class,'place_order']);
 Route::get('order_placed',[FrontController::class,'order_placed']);
 Route::post('khalti/payment/verify',[FrontController::class,'payment_verification']);
 Route::post('khalti/store/payment',[FrontController::class,'store_order_gateway_payment']);
-
+Route::post('product/review',[FrontController::class,'product_review_process']);
+Route::group(['middleware'=>'user_auth'],function(){
+Route::get('/order',[FrontController::class,'getOrder']);
+Route::get('/order_detail/{id}',[FrontController::class,'getOrderDetails']);
+Route::get('checkout',[FrontController::class,'checkout']);
+});
 //Admin
 Route::get('admin',[AdminController::class,'index']);
 Route::post('admin/auth',[AdminController::class,'auth'])->name('admin.auth');
@@ -130,6 +135,12 @@ Route::group(['middleware'=>'admin_auth'],function(){
     Route::get('admin/customer',[CustomerController::class,'index']);
     Route::get('admin/customer/view_customer/{id}',[CustomerController::class,'view_customer']);
     Route::get('admin/customer/status/{status}/{id}',[CustomerController::class,'status']);
+
+    //Admin Order
+    Route::get('admin/order',[OrderController::class,'index']);
+    Route::get('admin/order_detail/{id}',[OrderController::class,'order_detail']);
+    Route::get('admin/update_payemnt_status/{status}/{id}',[OrderController::class,'update_payemnt_status']);
+    Route::get('admin/update_order_status/{status}/{id}',[OrderController::class,'update_order_status']);
 
 
 });

@@ -83,6 +83,10 @@
                             <a href="{{url('admin/customer')}}">
                                 <i class="fa fa-user" aria-hidden="true"></i>Customers</a>
                         </li>
+                        <li class="@yield('order_select')">
+                            <a href="{{url('admin/order')}}">
+                                <i class="fas fa-shopping-basket"></i>Order</a>
+                        </li>
                     </ul>
                 </div>
             </nav>
@@ -136,6 +140,10 @@
                     <li class="@yield('customer_select')">
                         <a href="{{url('admin/customer')}}">
                             <i class="fa fa-user" aria-hidden="true"></i>Customers</a>
+                    </li>
+                    <li class="@yield('order_select')">
+                        <a href="{{url('admin/order')}}">
+                            <i class="fas fa-shopping-basket"></i>Order</a>
                     </li>
                     </ul>
                 </nav>

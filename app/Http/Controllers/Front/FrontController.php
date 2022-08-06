@@ -639,7 +639,7 @@ class FrontController extends Controller
             "coupon_value"=>$orderInfo['coupon_value'],
             "order_status"=>1,
             "payment_type"=>strtolower($orderInfo['payment_type']),
-            "payment_status"=>"success",
+            "payment_status"=>"Success",
             "payment_id"=>$request->payment_id,
             "total_amt"=>$orderInfo['total_amt'],
             "added_on"=>$orderInfo['added_on'],
@@ -665,5 +665,36 @@ class FrontController extends Controller
         $msg = "Order Placed";
         return response()->json(['status'=>$status,'msg'=>$msg]);
         }
+    }
+    public function getOrder(Request $request){
+        $result['orders'] = DB::table('orders')
+                            ->select('orders.*','order_status.status')
+                            ->leftJoin('order_status','order_status.id' ,'=','orders.order_status')
+                            ->where(['customer_id'=>$request->session()->get('USER_ID')])
+                            ->get();
+        // prx($result);
+        return view('front.order',$result);
+    }
+    public function getOrderDetails(Request $request, $id){
+        $result['orders_details']=
+        DB::table('order_details')
+        ->select('orders.*','order_details.price','order_details.qty','products.name as pname','product_attrib.attr_image','sizes.size','colors.color','order_status.status')
+        ->leftJoin('orders','orders.id','=','order_details.order_id')
+        ->leftJoin('product_attrib','product_attrib.id','=','order_details.product_attr_id')
+        ->leftJoin('products','products.id','=','product_attrib.product_id')
+        ->leftJoin('sizes','sizes.id','=','product_attrib.size_id')
+        ->leftJoin('order_status','order_status.id','=','orders.order_status')
+        ->leftJoin('colors','colors.id','=','product_attrib.color_id')
+        ->where(['orders.id'=>$id])
+        ->where(['orders.customer_id'=>$request->session()->get('USER_ID')])
+        ->get();
+        // prx($result);
+        if(!isset($result['orders_details'][0])){
+            return redirect('/');
+        }
+        return view('front.order_detail',$result);
+    }
+    public function product_review_process(Request $request){
+        prx($_POST);
     }
 }

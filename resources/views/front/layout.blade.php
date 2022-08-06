@@ -54,7 +54,15 @@
       }
   @endphp
   </head>
-  <body class="productPage"> 
+
+  <body class="productPage">
+    @if (session()->has('error'))
+    <div class="sufee-alert alert with-close alert-danger alert-dismissable fade show" role="alert">
+        <span class="badge badge-pill badge-danger">Failed</span>
+            {{session('error')}}
+        <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">x</span></button>
+    </div>    
+    @endif
    <!-- wpf loader Two -->
     <div id="wpf-loader-two">          
       <div class="wpf-loader-two-inner">
@@ -78,7 +86,7 @@
               <!-- start header top left -->
               <div class="aa-header-top-left">
                 <!-- start language -->
-                <div class="aa-language">
+                {{-- <div class="aa-language">
                   <div class="dropdown">
                     <a class="btn dropdown-toggle" href="#" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
                       <img src="{{asset('front_assets/img/flag/english.jpg')}}" alt="english flag">ENGLISH
@@ -89,11 +97,11 @@
                       <li><a href="#"><img src="{{asset('front_assets/img/flag/english.jpg')}}" alt="">ENGLISH</a></li>
                     </ul>
                   </div>
-                </div>
+                </div> --}}
                 <!-- / language -->
 
                 <!-- start currency -->
-                <div class="aa-currency">
+                {{-- <div class="aa-currency">
                   <div class="dropdown">
                     <a class="btn dropdown-toggle" href="#" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
                       <i class="fa fa-usd"></i>USD
@@ -104,21 +112,21 @@
                       <li><a href="#"><i class="fa fa-jpy"></i>YEN</a></li>
                     </ul>
                   </div>
-                </div>
+                </div> --}}
                 <!-- / currency -->
                 <!-- start cellphone -->
                 <div class="cellphone hidden-xs">
-                  <p><span class="fa fa-phone"></span>00-62-658-658</p>
+                  <p><span class="fa fa-phone"></span>XXXXXXXXXXX</p>
                 </div>
                 <!-- / cellphone -->
               </div>
               <!-- / header top left -->
               <div class="aa-header-top-right">
                 <ul class="aa-head-top-nav-right">
-                  <li><a href="javascript:void(0)">My Orders</a></li>
                   {{-- <li class="hidden-xs"><a href="javascript:void(0)">Wishlist</a></li> --}}
                   <li class="hidden-xs"><a href="{{url('/cart')}}">My Cart</a></li>
                   @if (session()->has('USER_LOGIN')!=null)
+                  <li><a href="{{url('/order')}}">My Orders</a></li>
                   <li><a href="{{url('/logout')}}">Logout</a></li>
                   @else
                   <li><a href="" data-toggle="modal" data-target="#login-modal">Login</a></li>
@@ -398,5 +406,10 @@
         @yield('script')
     });
 </script>
+{{-- <script type="text/javascript">
+  $(window).on('load', function() {
+      $('#myModal').modal('show');
+  });
+</script> --}}
   </body>
 </html>

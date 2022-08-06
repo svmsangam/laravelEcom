@@ -143,42 +143,33 @@
                            <div class="media-body">
                              <h4 class="media-heading"><strong>Marla Jobs</strong> - <span>March 26, 2016</span></h4>
                              <div class="aa-product-rating">
-                               <span class="fa fa-star"></span>
-                               <span class="fa fa-star"></span>
-                               <span class="fa fa-star"></span>
-                               <span class="fa fa-star"></span>
-                               <span class="fa fa-star-o"></span>
                              </div>
                              <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit.</p>
                            </div>
                          </div>
                        </li>
                     </ul>
+                    <form id="frmProductReview" class="aa-review-form">
                     <h4>Add a review</h4>
                     <div class="aa-your-rating">
                       <p>Your Rating</p>
-                      <a href="#"><span class="fa fa-star-o"></span></a>
-                      <a href="#"><span class="fa fa-star-o"></span></a>
-                      <a href="#"><span class="fa fa-star-o"></span></a>
-                      <a href="#"><span class="fa fa-star-o"></span></a>
-                      <a href="#"><span class="fa fa-star-o"></span></a>
+                      <select class="form-control" name="rating" required>
+                       <option value="">Select Rating</option>
+                       <option>Worst</option>
+                       <option>Bad</option>
+                       <option>Good</option>
+                       <option>Very Good</option>
+                       <option>Fantastic</option>
+                      </select>
                     </div>
                     <!-- review form -->
-                    <form action="" class="aa-review-form">
                        <div class="form-group">
                          <label for="message">Your Review</label>
-                         <textarea class="form-control" rows="3" id="message"></textarea>
-                       </div>
-                       <div class="form-group">
-                         <label for="name">Name</label>
-                         <input type="text" class="form-control" id="name" placeholder="Name">
-                       </div>  
-                       <div class="form-group">
-                         <label for="email">Email</label>
-                         <input type="email" class="form-control" id="email" placeholder="example@gmail.com">
-                       </div>
- 
+                         <textarea class="form-control" rows="3" id="message" name="review" required></textarea>
+                       </div> 
                        <button type="submit" class="btn btn-default aa-review-submit">Submit</button>
+                       <input type="hidden" name="product_id" value="{{$product[0]->id}}" />
+                       @csrf
                     </form>
                   </div>
                  </div>            

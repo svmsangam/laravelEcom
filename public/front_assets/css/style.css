@@ -4224,6 +4224,28 @@ img {
   color:#ff6666;
   font-size: 16px;
 }
+.productPage .sufee-alert{
+  opacity: 1;
+}
+.coupon_apply_txt{
+  font-size: 16px;
+  color: #ff6666;
+}
+.order_detail{
+  margin-bottom: 10px;
+  font-weight: bold;
+  line-height: 25px;
+}
+.order_id_btn{
+  background-color: #fff;
+  padding: 14px;
+}
+.order_id_btn a{
+  text-decoration: none;
+  color: #a5d549;
+  font-size: 16px;
+  /* font-weight: bold; */
+}
 /* .cc_remove{
   color: #ff6666;
   font-size: 10px;

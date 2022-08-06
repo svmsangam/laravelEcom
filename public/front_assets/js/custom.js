@@ -664,3 +664,21 @@ function pay_with_khalti(totalAmt,order_details){
   var checkout = new KhaltiCheckout(config);
   checkout.show({amount: (totalAmt*100)});
 }
+jQuery('#frmProductReview').submit(function (e){
+  e.preventDefault();
+  jQuery.ajax({
+      url:'/product/review',
+      data:jQuery('#frmProductReview').serialize(),
+      type:'post',
+      success:function(result){
+          // if(result.status == "success"){
+          //     window.location.href = "/order_placed";
+          //     jQuery('#order_place_msg').html(result.msg);
+          // }
+          // if(result.status == "error"){
+          //   jQuery('#order_place_msg').html(result.msg);
+          // }
+          console.log(result);
+        }      
+  });
+});
