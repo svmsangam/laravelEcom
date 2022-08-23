@@ -31,7 +31,7 @@
     </div>
   </section>
     <!-- Start Promo section -->
-  <section id="aa-promo">
+ <section id="aa-promo">
     <div class="container">
       <div class="row">
         <div class="col-md-12">
@@ -96,13 +96,16 @@
                           <figure>
                             <a class="aa-product-img" href="{{url('product/'.$productArr->slug)}}">
                                 <img src="{{asset('storage/media/'.$productArr->image)}}" style="height:300px;width:300px;" alt="{{$productArr->name}}"></a>
-                            <a class="aa-add-card-btn"  
+                            {{-- <a class="aa-add-card-btn"  
                               href="javascript:void(0)" onclick="add_to_home_cart('{{$productArr->id}}','{{$home_product_attrib[$productArr->id][0]->size}}')">
-                              <span class="fa fa-shopping-cart"></span>Add To Cart</a>
+                              <span class="fa fa-shopping-cart"></span>Add To Cart</a> --}}
                             <figcaption>
+                              {{-- @php
+                                  prx($home_product_attrib[$productArr->id][0]->size);
+                              @endphp --}}
                               <h4 class="aa-product-title"><a href="{{url('product/'.$productArr->slug)}}">{{$productArr->name}}</a></h4>
-                              <span class="aa-product-price"><del>Rs {{$home_product_attrib[$productArr->id][0]->mrp}}</del></span><span class="aa-product-price">
-                                Rs {{$home_product_attrib[$productArr->id][0]->price}}</span>
+                              {{-- <span class="aa-product-price"><del>Rs {{$home_product_attrib[$productArr->id][0]->mrp}}</del></span><span class="aa-product-price">
+                                Rs {{$home_product_attrib[$productArr->id][0]->price}}</span> --}}
                             </figcaption>
                           </figure>                          
                         </li>  
@@ -114,6 +117,7 @@
                           <figure>
                         <li>
                         @endif
+                        
                       </ul>
                     </div>
                     @endforeach
@@ -125,6 +129,7 @@
       </div>
     </div>
   </section>
+
   <!-- / Products section -->
   <!-- popular section -->
   <section id="aa-popular-category">
@@ -151,13 +156,13 @@
                        <figure>
                          <a class="aa-product-img" href="{{url('product/'.$productArr->slug)}}">
                              <img src="{{asset('storage/media/'.$productArr->image)}}" style="height:300px;width:300px;" alt="{{$productArr->name}}"></a>
-                         <a class="aa-add-card-btn" href="javascript:void(0)" 
+                         {{-- <a class="aa-add-card-btn" href="javascript:void(0)" 
                             onclick="add_to_home_cart('{{$productArr->id}}','{{$home_trending_product_attrib[$productArr->id][0]->size}}')">
-                            <span class="fa fa-shopping-cart"></span>Add To Cart</a>
+                            <span class="fa fa-shopping-cart"></span>Add To Cart</a> --}}
                          <figcaption>
                            <h4 class="aa-product-title"><a href="{{url('product/'.$productArr->slug)}}">{{$productArr->name}}</a></h4>
-                           <span class="aa-product-price"><del>Rs {{$home_trending_product_attrib[$productArr->id][0]->mrp}}</del></span><span class="aa-product-price">
-                             Rs {{$home_trending_product_attrib[$productArr->id][0]->price}}</span>
+                           {{-- <span class="aa-product-price"><del>Rs {{$home_trending_product_attrib[$productArr->id][0]->mrp}}</del></span><span class="aa-product-price">
+                             Rs {{$home_trending_product_attrib[$productArr->id][0]->price}}</span> --}}
                          </figcaption>
                        </figure>                          
                      </li>  
@@ -183,13 +188,13 @@
                             <figure>
                               <a class="aa-product-img" href="{{url('product/'.$productArr->slug)}}">
                                   <img src="{{asset('storage/media/'.$productArr->image)}}" style="height:300px;width:300px;" alt="{{$productArr->name}}"></a>
-                              <a class="aa-add-card-btn" href="javascript:void(0)" 
+                              {{-- <a class="aa-add-card-btn" href="javascript:void(0)" 
                                 onclick="add_to_home_cart('{{$productArr->id}}','{{$home_featured_product_attrib[$productArr->id][0]->size}}')">
-                                <span class="fa fa-shopping-cart"></span>Add To Cart</a>
+                                <span class="fa fa-shopping-cart"></span>Add To Cart</a> --}}
                               <figcaption>
                                 <h4 class="aa-product-title"><a href="{{url('product/'.$productArr->slug)}}">{{$productArr->name}}</a></h4>
-                                <span class="aa-product-price"><del>Rs {{$home_featured_product_attrib[$productArr->id][0]->mrp}}</del></span><span class="aa-product-price">
-                                  Rs {{$home_featured_product_attrib[$productArr->id][0]->price}}</span>
+                                {{-- <span class="aa-product-price"><del>Rs {{$home_featured_product_attrib[$productArr->id][0]->mrp}}</del></span><span class="aa-product-price">
+                                  Rs {{$home_featured_product_attrib[$productArr->id][0]->price}}</span> --}}
                               </figcaption>
                             </figure>                          
                           </li>  
@@ -215,13 +220,13 @@
                           <figure>
                             <a class="aa-product-img" href="{{url('product/'.$productArr->slug)}}">
                                 <img src="{{asset('storage/media/'.$productArr->image)}}" style="height:300px;width:300px;" alt="{{$productArr->name}}"></a>
-                            <a class="aa-add-card-btn" href="javascript:void(0)"
+                            {{-- <a class="aa-add-card-btn" href="javascript:void(0)"
                               onclick="add_to_home_cart('{{$productArr->id}}','{{$home_discounted_product_attrib[$productArr->id][0]->size}}')">
-                              <span class="fa fa-shopping-cart"></span>Add To Cart</a>
+                              <span class="fa fa-shopping-cart"></span>Add To Cart</a> --}}
                             <figcaption>
                               <h4 class="aa-product-title"><a href="{{url('product/'.$productArr->slug)}}">{{$productArr->name}}</a></h4>
-                              <span class="aa-product-price"><del>Rs {{$home_discounted_product_attrib[$productArr->id][0]->mrp}}</del></span><span class="aa-product-price">
-                                Rs {{$home_discounted_product_attrib[$productArr->id][0]->price}}</span>
+                              {{-- <span class="aa-product-price"><del>Rs {{$home_discounted_product_attrib[$productArr->id][0]->mrp}}</del></span><span class="aa-product-price">
+                                Rs {{$home_discounted_product_attrib[$productArr->id][0]->price}}</span> --}}
                             </figcaption>
                           </figure>                          
                         </li>  
@@ -243,12 +248,14 @@
       </div>
     </div>
   </section>
-  <!-- / popular section -->
+ 
   <input type="hidden" id="qty" value="1">
   <form id="addToCartForm">
     <input type="hidden" id="size_id" name="size_id">
     <input type="hidden" id="productQty" name="productQty">
     <input type="hidden" id="product_id" name="product_id">
     @csrf
-  </form>  
+  </form>   
+
   @endsection   
+  

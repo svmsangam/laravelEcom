@@ -39,6 +39,7 @@ class FrontController extends Controller
                     ->where(['product_attrib.product_id'=>$list1->id])->get();
                 }      
         }
+        // prx($result);
         //getting featured product
         $result['home_featured_product'][$list->id] = DB::table('products')
             ->where(['status'=>1])
@@ -78,10 +79,7 @@ class FrontController extends Controller
             ->leftJoin('flavours','flavours.id','=','product_attrib.flavour_id')
             ->where(['product_attrib.product_id'=>$list1->id])->get();
         }       
-        // echo"<pre>";
-        // print_r($result);
-        // die();
-        //getting banners
+        // prx($result);
         $result['home_banners'] = DB::table('home_banners')->where(['status'=>1])->get();
         return view('front.index',$result);
     }
@@ -128,11 +126,11 @@ class FrontController extends Controller
             // echo"<pre>";
             // print_r($result['product_images']);
             // die(); 
+            // return response($result);    
         return view('front.product', $result);
     }
 
     public function add_to_cart(Request $request){
-        $SKU = '';
         $finalAvailable = 0;
         if($request->session()->has('USER_LOGIN')){
             $uid = $request->session()->get('USER_ID');
@@ -176,18 +174,6 @@ class FrontController extends Controller
             }else{
                  DB::table('carts')->where(['id'=>$update_id])
                 ->update(['qty'=>$qty]);
-                    $SKU=  DB::table('product_attrib')
-                    ->where(['product_attrib.product_id'=>$productId])
-                    ->where(['product_attrib.id' =>$product_attrib_id])
-                    ->select('product_attrib.sku','product_attrib.quantity')
-                    ->get();
-                    $remainingStock = $SKU[0]->quantity - $qty;
-                    DB::table('product_attrib')
-                    ->where(['sku'=>$SKU[0]->sku])
-                    ->update([
-                        'product_attrib.quantity'=>$remainingStock
-                    ]);
-
                 $msg = "Updated";
             }
         }else{
@@ -199,19 +185,6 @@ class FrontController extends Controller
                 'qty'=>$qty,
                 'added_on'=>date('Y-m-d h:i:s')
             ]);
-            if($id>0){
-                $SKU=  DB::table('product_attrib')
-                 ->where(['product_attrib.product_id'=>$productId])
-                 ->where(['product_attrib.id' =>$product_attrib_id])
-                 ->select('product_attrib.sku','product_attrib.quantity')
-                 ->get();
-                $remainingStock = $SKU[0]->quantity - $qty;
-                DB::table('product_attrib')
-                ->where(['sku'=>$SKU[0]->sku])
-                ->update([
-                    'product_attrib.quantity'=>$remainingStock
-                ]);
-            }
             $msg = "Added";
         }         
 
@@ -760,5 +733,12 @@ class FrontController extends Controller
             $request->session()->flash('error','Please login first.');
         }
         return response()->json(['status'=>$status,'msg'=>$msg]);
+    }
+    public function getAllProducts(){
+        $result['product'] = DB::table('products')
+        ->where(['status'=>1])
+        ->select('products.name','products.desc','products.keywords')
+        ->get();
+        return ($result['product']);
     }
 }
