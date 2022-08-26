@@ -200,11 +200,12 @@ class ProductController extends Controller
                     $productAttrArr['flavour_id']=$flavour_IdArr[$key];
                 }
                 if($request->hasFile("attr_image.$key")){
-                    if($request->post('id')>0){
+                    if($paidArr[$key]!=''){
                         $arrAttrImages = DB::table('product_attrib')->where(['id'=>$paidArr[$key]])->get();
                             if(Storage::exists('/public/media/'.$arrAttrImages[0]->attr_image)){
                                 Storage::delete('/public/media/'.$arrAttrImages[0]->attr_image);
-                            }                   
+                            }
+                                             
                     }
                     $rand = rand('11111111','99999999');
                     $attr_image = $request->file("attr_image.$key");

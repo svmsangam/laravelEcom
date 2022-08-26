@@ -153,7 +153,7 @@ class FrontController extends Controller
 
         $getAvailableStockQty = getAvaliableQty($productId,$product_attrib_id); 
 
-        $finalAvailable=$getAvailableStockQty[0]->pqty - $getAvailableStockQty[0]->qty;
+        $finalAvailable=($getAvailableStockQty[0]->pqty - $getAvailableStockQty[0]->qty)+1;
         if($qty>$finalAvailable){
             return response()->json(['msg'=>"not_avaliable",'data'=>"Only $finalAvailable left"]);
         }
@@ -383,7 +383,7 @@ class FrontController extends Controller
                 $request->session()->put('USER_ID',$result[0]->id);
                 $request->session()->put('USER_NAME',$result[0]->name);
                 $status = 'success';
-                $msg = '';
+                $msg = 'Login successfull';
                 $getUserTempId = getTempUserId();
                 DB::table('carts')
                 ->where(['user_id'=>$getUserTempId])
@@ -598,14 +598,14 @@ class FrontController extends Controller
         }
         return response()->json(['status'=>$status,'msg'=>$msg]);
     }
-    public function order_placed(Request $request){
-        if($request->session()->has('ORDER_ID')){
-            return view('front.order_placed');
-            session()->forget('ORDER_ID');
-        }else{
-            return redirect('/');
-        }
-    }
+    // public function order_placed(Request $request){
+    //     if($request->session()->has('ORDER_ID')){
+    //         return view('front.order_placed');
+    //         session()->forget('ORDER_ID');
+    //     }else{
+    //         return redirect('/');
+    //     }
+    // }
     public function payment_verification(Request $request){
         $token = $request->token;
         $amt = 0;
@@ -674,10 +674,10 @@ class FrontController extends Controller
             $i++;
 
         }
-        DB::table('order_details')->insert($productDetailArr); 
+        DB::table('order_details')->insert($productDetailArr);
         
         DB::table('carts')->where(['user_id'=>$uid,'user_type'=>'reg'])->delete();
-        $request->session()->put('ORDER_ID',$order_id);
+        // $request->session()->put('ORDER_ID',$order_id);
         $status = "success";
         $msg = "Order Placed";
         return response()->json(['status'=>$status,'msg'=>$msg]);
@@ -734,11 +734,5 @@ class FrontController extends Controller
         }
         return response()->json(['status'=>$status,'msg'=>$msg]);
     }
-    public function getAllProducts(){
-        $result['product'] = DB::table('products')
-        ->where(['status'=>1])
-        ->select('products.name','products.desc','products.keywords')
-        ->get();
-        return ($result['product']);
-    }
+
 }

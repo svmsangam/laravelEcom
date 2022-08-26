@@ -588,7 +588,7 @@ jQuery('#frmPlaceOrder').submit(function (e){
       type:'post',
       success:function(result){
           if(result.status == "success"){
-              window.location.href = "/order_placed";
+              window.location.href = "/order";
               jQuery('#order_place_msg').html(result.msg);
           }
           if(result.status == "error"){
@@ -605,7 +605,7 @@ function pay_with_khalti(totalAmt,order_details){
   var config = {
       // replace the publicKey with yours
       "publicKey": "test_public_key_30c12c3272744045b36db2c0c3321e21",
-      "productIdentity": "1234567890",
+      "productIdentity": "1234567869",
       "productName": "Dragon",
       "productUrl": "http://gameofthrones.wikia.com/wiki/Dragons",
       "paymentPreference": [
@@ -639,13 +639,13 @@ function pay_with_khalti(totalAmt,order_details){
                           },
                           success:function(result){
                             if(result.status == "success"){
-                                window.location.href = "/order_placed";
-                                
+                                window.location.href = "/order";                                
                             }
                           }
                       });
                   }
                  if(result.status == "error"){
+                  console.log
                   jQuery('#order_place_msg').html(result.msg);
                  }
                 }
