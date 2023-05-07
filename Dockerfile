@@ -16,6 +16,10 @@ RUN git clone https://github.com/svmsangam/laravelEcom.git .
 # Install Laravel dependencies
 ENV COMPOSER_ALLOW_SUPERUSER=1
 RUN composer install
+RUN composer dump-autoload
+
+# Copy the common.php file to the app/helper directory
+COPY ./app/Helper/common.php /var/www/html/app/Helper/common.php
 
 
 
