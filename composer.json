@@ -6,6 +6,7 @@
     "license": "MIT",
     "require": {
         "php": "^8.0.2",
+        "doctrine/dbal": "^3.6",
         "guzzlehttp/guzzle": "^7.2",
         "laravel/framework": "^9.2",
         "laravel/sanctum": "^2.14.1",
@@ -27,7 +28,7 @@
             "Database\\Seeders\\": "database/seeders/"
         },
         "files": [
-            "app/helper/common.php"
+            "app/Helper/common.php"
         ]
     },
     "autoload-dev": {
@@ -35,7 +36,7 @@
             "Tests\\": "tests/"
         },
         "files": [
-            "app/helper/common.php"
+            "app/Helper/common.php"
         ]
     },
     "scripts": {
