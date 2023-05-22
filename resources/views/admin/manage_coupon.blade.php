@@ -57,18 +57,18 @@
                                             <option value="per" selected>Percentage</option>
                                         @else
                                         <option value="val">Value</option>
-                                        <option value="per">Percentage</option>   
-                                        @endif    
+                                        <option value="per">Percentage</option>
+                                        @endif
                                     </select>
                                 </div>
                                 <div class="col-md-3">
                                     <label for="min_order_amt" class="control-label mb-1">Minimum Order Amount</label>
                                     <input id="min_order_amt"  value = "{{$min_order_amt}}" name="min_order_amount" type="text" class="form-control" aria-required="true" aria-invalid="false">
-                                    {{-- @error('min_order_amount')
+                                    @error('min_order_amount')
                                         <div class="alert alert-danger">
                                             {{$message}}
                                         </div>
-                                    @enderror --}}
+                                    @enderror
                                 </div>
                                 <div class="col-md-3">
                                     <label for="is_one_time" class="control-label mb-1">Is one time?</label>
@@ -79,11 +79,11 @@
                                         @else
                                             <option value="1">Yes</option>
                                             <option value="0" selected>No</option>
-                                        @endif 
+                                        @endif
                                     </select>
                                 </div>
-                            </div>     
-                        </div>  
+                            </div>
+                        </div>
                         <div>
                             <button id="payment-button" type="submit" class="btn btn-lg btn-info btn-block">
                                Submit
@@ -97,4 +97,3 @@
     </div>
 </div>
 @endsection
-    

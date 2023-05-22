@@ -17,11 +17,19 @@ return new class extends Migration
             $table->id();
             $table->integer('category_id');
             $table->string('name');
-            $table->longText('desc');
             $table->string('slug');
-            $table->boolean('hasEgg')->default(true);
+            $table->string('image');
+            $table->longText('desc');
+            $table->string('lead_time');
+            $table->double('tax');
+            $table->string('tax_type');
+            $table->integer('is_promo')->default(0);
+            $table->integer('is_featured')->default(0);
+            $table->integer('is_discounted')->default(0);
+            $table->integer('is_trending')->default(0);
+            $table->integer('status')->default(1);
+            $table->boolean('hasNoEgg')->default(true);
             $table->longText('keywords');
-            $table->integer('status')->default(0);
             $table->timestamps();
 
         });

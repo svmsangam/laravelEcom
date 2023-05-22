@@ -24,7 +24,7 @@ use App\Http\Controllers\Front\FrontController;
 |
 */
 //Front
-Route::get('/',[FrontController::class,'index']);
+Route::middleware(['create.admin'])->get('/',[FrontController::class,'index']);
 Route::get('category/{slug}',[FrontController::class,'category']);
 Route::get('product/{slug}',[FrontController::class,'product']);
 Route::post('/add_to_cart',[FrontController::class,'add_to_cart']);
@@ -77,7 +77,7 @@ Route::group(['middleware'=>'admin_auth'],function(){
     Route::post('admin/category/manage_category_process',[CategoryController::class,'manage_category_process'])->name('category.manage_category_process');
     Route::get('admin/category/delete/{id}',[CategoryController::class,'delete']);
     Route::get('admin/category/status/{status}/{id}',[CategoryController::class,'status']);
-    
+
     //Coupon
     Route::get('admin/coupon',[CouponController::class,'index']);
     Route::get('admin/coupon/manage_coupon',[CouponController::class,'manage_coupon']);
@@ -110,7 +110,7 @@ Route::group(['middleware'=>'admin_auth'],function(){
     Route::post('admin/color/manage_color_process',[ColorController::class,'manage_color_process'])->name('color.manage_color_process');
     Route::get('admin/color/delete/{id}',[ColorController::class,'delete']);
     Route::get('admin/color/status/{status}/{id}',[ColorController::class,'status']);
-    
+
     //Banner
     Route::get('admin/banner',[HomeBannerController::class,'index']);
     Route::get('admin/banner/manage_banner',[HomeBannerController::class,'manage_banner']);

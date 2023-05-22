@@ -24,18 +24,18 @@ class CouponController extends Controller
             $result['title'] = $arr['0']->title;
             $result['value'] = $arr['0']->value;
             $result['code'] = $arr['0']->code;
-            $result['type'] = $arr['0']->type;  
+            $result['type'] = $arr['0']->type;
             $result['min_order_amt'] = $arr['0']->min_order_amt;
-            $result['is_one_time'] = $arr['0']->is_one_time;  
+            $result['is_one_time'] = $arr['0']->is_one_time;
             $result['id'] = $arr['0']->id;
 
         }else{
             $result['title'] = '';
             $result['value'] = '';
             $result['code'] = '';
-            $result['type'] ='';  
+            $result['type'] ='';
             $result['min_order_amt'] ='';
-            $result['is_one_time'] =''; 
+            $result['is_one_time'] ='';
             $result['id'] = 0;
         }
         return view('admin.manage_coupon',$result);
@@ -44,7 +44,8 @@ class CouponController extends Controller
         $request->validate([
             'title' => 'required',
             'code'=>'required|unique:coupons,code,'.$request->post('id'),
-            'value'=>'required'
+            'value'=>'required',
+            'min_order_amount'=>'required|numeric'
         ]);
         if($request->post('id')>0){
             $coupon = Coupon::find($request->post('id'));

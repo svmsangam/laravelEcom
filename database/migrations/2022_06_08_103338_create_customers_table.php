@@ -18,6 +18,9 @@ return new class extends Migration
             $table->string('name');
             $table->string('email');
             $table->string('mobile');
+            $table->string('password');
+            $table->integer('is_verified')->default(0);
+            $table->integer('rand_id')->nullable(true);
             $table->string('address');
             $table->string('city');
             $table->integer('status');
