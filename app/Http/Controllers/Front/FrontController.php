@@ -7,10 +7,8 @@ use Illuminate\Support\Facades\Validator;
 // use App\Models\Admin\Admin;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Crypt;
 use Illuminate\Support\Facades\Mail;
-use function Ramsey\Uuid\v1;
 
 class FrontController extends Controller
 {
@@ -25,7 +23,8 @@ class FrontController extends Controller
         $result['home_categories'] = DB::table('categories')->where(['status' => 1])
             ->where(['showOnHome' => 1])
             ->get();
-        //getting product  of specific category          
+        if(!$result['home_categories']->isEmpty()){
+        //getting product  of specific category
         foreach ($result['home_categories'] as $list) {
             $result['home_categories_product'][$list->id] = DB::table('products')
                 ->where(['status' => 1])
@@ -39,6 +38,7 @@ class FrontController extends Controller
                     ->leftJoin('flavours', 'flavours.id', '=', 'product_attrib.flavour_id')
                     ->where(['product_attrib.product_id' => $list1->id])->get();
             }
+        }
 
             // prx($result);
             //getting featured product
@@ -80,7 +80,8 @@ class FrontController extends Controller
                     ->leftJoin('flavours', 'flavours.id', '=', 'product_attrib.flavour_id')
                     ->where(['product_attrib.product_id' => $list1->id])->get();
             }
-        }        // prx($result);
+        }
+                // prx($result);
         $result['home_banners'] = DB::table('home_banners')->where(['status' => 1])->get();
         return view('front.index', $result);
     }
@@ -127,8 +128,8 @@ class FrontController extends Controller
             ->get();
         // echo"<pre>";
         // print_r($result['product_images']);
-        // die(); 
-        // return response($result);    
+        // die();
+        // return response($result);
         return view('front.product', $result);
     }
 
@@ -308,7 +309,7 @@ class FrontController extends Controller
         $result['categories_left'] = DB::table('categories')->where(['status' => 1])
             ->where(['showOnHome' => 1])
             ->get();
-        // prx($result); 
+        // prx($result);
         return view('front.category', $result);
     }
     public function search(Request $request, $str)
@@ -336,7 +337,7 @@ class FrontController extends Controller
             $query = $query->get();
             $result['product_attrib'][$list1->id] = $query;
         }
-        // prx($result); 
+        // prx($result);
         return view('front.search', $result);
     }
     public function register(Request $request)
@@ -377,7 +378,7 @@ class FrontController extends Controller
                     $messages->to($user['to']);
                     $messages->subject('Verify your email');
                 });
-                return response()->json(['status' => 'success', 'msg' => 'User Registration Successful. Please verify your email. 
+                return response()->json(['status' => 'success', 'msg' => 'User Registration Successful. Please verify your email.
                 Verification link might be in spam folder']);
             }
         }
@@ -624,7 +625,7 @@ class FrontController extends Controller
                 $status = "error";
                 $msg = "Failed to place order";
             }
-            // prx($productDetailArr);         
+            // prx($productDetailArr);
         } else {
             return response()->json(['status' => 'error', 'msg' => 'Please login first!!!']);;
             // return redirect('')

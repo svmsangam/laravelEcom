@@ -33,7 +33,7 @@ class ProductController extends Controller
             $result['hasNoEgg'] = $arr['0']->hasNoEgg;
             $result['keywords'] = $arr['0']->keywords;
             $result['status'] = $arr['0']->status;
-            $result['slug'] = $arr['0']->slug; 
+            $result['slug'] = $arr['0']->slug;
             $result['id'] = $arr['0']->id;
             $result['lead_time'] = $arr['0']->lead_time;
             $result['tax'] = $arr['0']->tax;
@@ -48,11 +48,11 @@ class ProductController extends Controller
             // print_r($result['prodAttrArr']);
             // die();
             if(!isset($prodImageArr[0])){
-                $result['prodImageArr'][0]['id']=''; 
+                $result['prodImageArr'][0]['id']='';
                 $result['prodImageArr'][0]['images']='';
                 $result['prodImageArr'][0]['product_id']='';
             }else{
-                $result['prodImageArr'] = $prodImageArr; 
+                $result['prodImageArr'] = $prodImageArr;
             }
 
         }else{
@@ -63,7 +63,7 @@ class ProductController extends Controller
             $result['hasNoEgg'] = 0;
             $result['keywords'] ='';
             $result['status'] ='';
-            $result['slug'] = ''; 
+            $result['slug'] = '';
             $result['id'] = 0;
             $result['lead_time'] = '';
             $result['tax']='';
@@ -88,7 +88,7 @@ class ProductController extends Controller
             // die();
             //Product Images
             $result['prodImageArr'][0]['product_id']='';
-            $result['prodImageArr'][0]['id']=''; 
+            $result['prodImageArr'][0]['id']='';
             $result['prodImageArr'][0]['images']='';
 
         }
@@ -113,8 +113,8 @@ class ProductController extends Controller
             'attr_image.*'=>'mimes:jpeg,jpg,png',
             'images.*'=>'mimes:jpeg,jpg,png',
             'quantity.*'=>'required|integer',
-            'mrp.*'=>'required|integer',
-            'price.*'=>'required|integer'
+            'mrp.*'=>'required|numeric',
+            'price.*'=>'required|numeric'
 
         ]);
         if($request->post('id')>0){
@@ -137,7 +137,7 @@ class ProductController extends Controller
             $ext = $image->extension();
             $image_name = time().'.'.$ext;
             $image->storeAs('/public/media',$image_name);
-            $product->image = $image_name;            
+            $product->image = $image_name;
         }
 
         $product->name = $request->post('name');
@@ -155,7 +155,7 @@ class ProductController extends Controller
         $product->is_trending = $request->post('is_trending');
         $product->save();
         $prod_id=$product->id;
-        
+
         /*Product attribute*/
         $paidArr = $request->post('paid');
         $skuArr = $request->post('sku');
@@ -171,7 +171,7 @@ class ProductController extends Controller
             $productAttrArr = [];
             $check = DB::table('product_attrib')->where('sku' ,'=' , $skuArr[$key])
                 ->where('id' ,'!=' , $paidArr[$key])->get();
-            
+
             if(isset($check[0])){
                 $request->session()->flash('sku_error','SKU:'.$skuArr[$key].' already used.');
                 return redirect(request()->headers->get('referer'));
@@ -182,19 +182,19 @@ class ProductController extends Controller
                 $productAttrArr['price']=(int)$priceArr[$key];
                 $productAttrArr['quantity']=(int)$qtyArr[$key];
                 if($size_IdArr[$key]==''){
-                    $productAttrArr['size_id']=0;    
+                    $productAttrArr['size_id']=0;
                 }
                 else{
                     $productAttrArr['size_id']=$size_IdArr[$key];
                 }
                 if($color_IdArr[$key]==''){
-                    $productAttrArr['color_id']=0;    
+                    $productAttrArr['color_id']=0;
                 }
                 else{
                     $productAttrArr['color_id']=$color_IdArr[$key];
                 }
                 if($flavour_IdArr[$key]==''){
-                    $productAttrArr['flavour_id']=0;    
+                    $productAttrArr['flavour_id']=0;
                 }
                 else{
                     $productAttrArr['flavour_id']=$flavour_IdArr[$key];
@@ -205,24 +205,24 @@ class ProductController extends Controller
                             if(Storage::exists('/public/media/'.$arrAttrImages[0]->attr_image)){
                                 Storage::delete('/public/media/'.$arrAttrImages[0]->attr_image);
                             }
-                                             
+
                     }
                     $rand = rand('11111111','99999999');
                     $attr_image = $request->file("attr_image.$key");
                     $ext = $attr_image->extension();
                     $image_name = $rand.'.'.$ext;
                     $request->file("attr_image.$key")->storeAs('/public/media',$image_name);
-                    $productAttrArr['attr_image']=$image_name;     
+                    $productAttrArr['attr_image']=$image_name;
                 }
                 if($paidArr[$key] != ''){
                     DB::table('product_attrib')->where(['id'=>$paidArr[$key]])->update($productAttrArr);
                 }else{
                     $productAttrArr['attr_image']='';
                     DB::table('product_attrib')->insert($productAttrArr);
-                }   
+                }
             }
         }
-    
+
         /*Product attribute*/
 
         /*Product images*/
@@ -246,13 +246,13 @@ class ProductController extends Controller
                     $ext = $attr_image->extension();
                     $image_name = $rand.'.'.$ext;
                     $request->file("images.$key")->storeAs('/public/media',$image_name);
-                    $prodImageArr['images']=$image_name;  
-                } 
+                    $prodImageArr['images']=$image_name;
+                }
                     if($piidArr[$key] != ''){
                         DB::table('product_images')->where(['id'=>$piidArr[$key]])->update($prodImageArr);
                     }else{
                         DB::table('product_images')->insert($prodImageArr);
-                    }     
+                    }
             }
 
         /*Product images*/
