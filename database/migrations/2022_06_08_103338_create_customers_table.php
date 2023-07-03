@@ -21,9 +21,9 @@ return new class extends Migration
             $table->string('password');
             $table->integer('is_verified')->default(0);
             $table->integer('rand_id')->nullable(true);
-            $table->string('address');
-            $table->string('city');
-            $table->integer('status');
+            $table->string('address')->nullable(true);
+            $table->string('city')->nullable(true);
+            $table->integer('status')->default(1);
             $table->timestamps();
 
         });

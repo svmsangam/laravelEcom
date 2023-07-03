@@ -3,30 +3,30 @@
   <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1">    
+    <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>@yield('title')</title>
-    
+
     <!-- Font awesome -->
     <link href="{{asset('front_assets/css/font-awesome.css')}}" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.5.0/css/all.min.css">
     <!-- Bootstrap -->
-    <link href="{{asset('front_assets/css/bootstrap.css')}}" rel="stylesheet">   
+    <link href="{{asset('front_assets/css/bootstrap.css')}}" rel="stylesheet">
     <!-- SmartMenus jQuery Bootstrap Addon CSS -->
     <link href="{{asset('front_assets/css/jquery.smartmenus.bootstrap.css')}}" rel="stylesheet">
     <!-- Product view slider -->
-    <link rel="stylesheet" type="text/css" href="{{asset('front_assets/css/jquery.simpleLens.css')}}">    
+    <link rel="stylesheet" type="text/css" href="{{asset('front_assets/css/jquery.simpleLens.css')}}">
     <!-- slick slider -->
     <link rel="stylesheet" type="text/css" href="{{asset('front_assets/css/slick.css')}}">
     <!-- price picker slider -->
     <link rel="stylesheet" type="text/css" href="{{asset('front_assets/css/nouislider.css')}}">
     <!-- Theme color -->
     <link id="switcher" href="{{asset('front_assets/css/theme-color/default-theme.css')}}" rel="stylesheet">
-     <link id="switcher" href="{{asset('front_assets/css/theme-color/bridge-theme.css')}}" rel="stylesheet"> 
+     <link id="switcher" href="{{asset('front_assets/css/theme-color/bridge-theme.css')}}" rel="stylesheet">
     <!-- Top Slider CSS -->
     <link href="{{asset('front_assets/css/sequence-theme.modern-slide-in.css')}}" rel="stylesheet" media="all">
 
     <!-- Main style sheet -->
-    <link href="{{asset('front_assets/css/style.css')}}" rel="stylesheet">    
+    <link href="{{asset('front_assets/css/style.css')}}" rel="stylesheet">
 
     <!-- Google Font -->
     <link href='https://fonts.googleapis.com/css?family=Lato' rel='stylesheet' type='text/css'>
@@ -61,15 +61,15 @@
         <span class="badge badge-pill badge-danger">Failed</span>
             {{session('error')}}
         <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">x</span></button>
-    </div>    
+    </div>
     @endif
    <!-- wpf loader Two -->
-    <div id="wpf-loader-two">          
+    <div id="wpf-loader-two">
       <div class="wpf-loader-two-inner">
         <span>Loading</span>
       </div>
-    </div> 
-    <!-- / wpf loader Two -->       
+    </div>
+    <!-- / wpf loader Two -->
   <!-- SCROLL TOP BUTTON -->
     <a class="scrollToTop" href="#"><i class="fa fa-chevron-up"></i></a>
   <!-- END SCROLL TOP BUTTON -->
@@ -86,7 +86,7 @@
               <!-- start header top left -->
               <div class="aa-header-top-left">
                 <!-- start language -->
-                {{-- <div class="aa-language">
+                <div class="aa-language">
                   <div class="dropdown">
                     <a class="btn dropdown-toggle" href="#" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
                       <img src="{{asset('front_assets/img/flag/english.jpg')}}" alt="english flag">ENGLISH
@@ -97,11 +97,11 @@
                       <li><a href="#"><img src="{{asset('front_assets/img/flag/english.jpg')}}" alt="">ENGLISH</a></li>
                     </ul>
                   </div>
-                </div> --}}
+                </div>
                 <!-- / language -->
 
                 <!-- start currency -->
-                {{-- <div class="aa-currency">
+                <div class="aa-currency">
                   <div class="dropdown">
                     <a class="btn dropdown-toggle" href="#" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
                       <i class="fa fa-usd"></i>USD
@@ -112,7 +112,7 @@
                       <li><a href="#"><i class="fa fa-jpy"></i>YEN</a></li>
                     </ul>
                   </div>
-                </div> --}}
+                </div>
                 <!-- / currency -->
                 <!-- start cellphone -->
                 <div class="cellphone hidden-xs">
@@ -123,7 +123,7 @@
               <!-- / header top left -->
               <div class="aa-header-top-right">
                 <ul class="aa-head-top-nav-right">
-                  {{-- <li class="hidden-xs"><a href="javascript:void(0)">Wishlist</a></li> --}}
+                  <li class="hidden-xs"><a href="javascript:void(0)">Wishlist</a></li>
                   <li class="hidden-xs"><a href="{{url('/cart')}}">My Cart</a></li>
                   @if (session()->has('USER_LOGIN')!=null)
                   <li><a href="{{url('/order')}}">My Orders</a></li>
@@ -152,7 +152,7 @@
                 <a href="{{url('/')}}">
                   <span class="fa fa-shopping-cart"></span>
                   <p><strong>{{Config::get('constants.SITE_NAME')}}</strong></p>
-                  {{-- <img src="{{asset('logo/CakeSewa.png')}}" alt="{{Config::get('constants.SITE_NAME')}}"> --}}
+                  <img src="{{asset('logo/CakeSewa.png')}}" alt="{{Config::get('constants.SITE_NAME')}}">
                 </a>
                 <!-- img based logo -->
                 <!-- <a href="index.html"><img src="{{asset('front_assets/img/logo.jpg')}}" alt="logo img"></a> -->
@@ -175,17 +175,17 @@
                       <ul>
                         @foreach ($getCartItems as $item)
                         @php
-                          $totalPrice = $totalPrice + ($item->qty*$item->price);    
-                        @endphp       
+                          $totalPrice = $totalPrice + ($item->qty*$item->price);
+                        @endphp
                         <li>
-                          <a class="aa-cartbox-img" href="#"><img src="{{asset('storage/media/'.$item->image)}}" 
+                          <a class="aa-cartbox-img" href="#"><img src="{{asset('storage/media/'.$item->image)}}"
                             alt="{{$item->name}}"></a>
                           <div class="aa-cartbox-info">
                             <h4><a href="#">{{$item->name}}</a></h4>
                             <p>{{$item->qty}}* Rs.{{$item->price}}</p>
                           </div>
                         </li>
-                        @endforeach    
+                        @endforeach
                         <li>
                           <span class="aa-cartbox-total-title">
                             Total
@@ -195,7 +195,7 @@
                           </span>
                         </li>
                       </ul>
-                      <a class="aa-cartbox-checkout aa-primary-btn" href="{{url('/cart')}}">Cart</a>                 
+                      <a class="aa-cartbox-checkout aa-primary-btn" href="{{url('/cart')}}">Cart</a>
                   @endif
               </div>
               </div>
@@ -207,7 +207,7 @@
                   <button type="button" onclick="prodSearch()"><span class="fa fa-search"></span></button>
                 </form>
               </div>
-              <!-- / search box -->             
+              <!-- / search box -->
             </div>
           </div>
         </div>
@@ -228,14 +228,14 @@
               <span class="icon-bar"></span>
               <span class="icon-bar"></span>
               <span class="icon-bar"></span>
-            </button>          
+            </button>
           </div>
           <div class="navbar-collapse collapse">
             <!-- Left nav -->
            {!! getTopNav() !!}
           </div><!--/.nav-collapse -->
         </div>
-      </div>       
+      </div>
     </div>
   </section>
   <!-- / menu -->
@@ -243,7 +243,7 @@
     @show
 
   <!-- / slider -->
-  <!-- footer -->  
+  <!-- footer -->
   <footer id="aa-footer">
     <!-- footer bottom -->
     <div class="aa-footer-top">
@@ -337,10 +337,10 @@
   </footer>
   <!-- / footer -->
 
-  <!-- Login Modal -->  
+  <!-- Login Modal -->
   <div class="modal fade" id="login-modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
     <div class="modal-dialog">
-      <div class="modal-content">                      
+      <div class="modal-content">
         <div class="modal-body">
         <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
           <div id="popup-login">
@@ -352,8 +352,8 @@
               <input type="password" name="loginPassword" placeholder="Password" value = "{{$loginPassword}}" required>
               <div class="login_msg"></div>
               <button class="aa-browse-btn" type="submit" id="btnLogin">Login</button>
-              <label for="rememberme" class="rememberme"><input type="checkbox" id="rememberme" name="rememberme" {{$is_remember}}> 
-                Remember me 
+              <label for="rememberme" class="rememberme"><input type="checkbox" id="rememberme" name="rememberme" {{$is_remember}}>
+                Remember me
               </label>
               <p class="aa-lost-password"><a href="javascript:void(0)" onclick="forgotPassword()">Lost your password?</a></p>
               <div class="aa-register-now">
@@ -376,22 +376,22 @@
               @csrf
             </form>
           </div>
-        </div>                        
+        </div>
       </div><!-- /.modal-content -->
     </div><!-- /.modal-dialog -->
-  </div>    
+  </div>
 
   <!-- jQuery library -->
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
   <!-- Include all compiled plugins (below), or include individual files as needed -->
-  <script src="{{asset('front_assets/js/bootstrap.js')}}"></script>  
+  <script src="{{asset('front_assets/js/bootstrap.js')}}"></script>
   <!-- SmartMenus jQuery plugin -->
   <script type="text/javascript" src="{{asset('front_assets/js/jquery.smartmenus.js')}}"></script>
   <!-- SmartMenus jQuery Bootstrap Addon -->
-  <script type="text/javascript" src="{{asset('front_assets/js/jquery.smartmenus.bootstrap.js')}}"></script>  
+  <script type="text/javascript" src="{{asset('front_assets/js/jquery.smartmenus.bootstrap.js')}}"></script>
   <!-- To Slider JS -->
   <script src="{{asset('front_assets/js/sequence.js')}}"></script>
-  <script src="{{asset('front_assets/js/sequence-theme.modern-slide-in.js')}}"></script>  
+  <script src="{{asset('front_assets/js/sequence-theme.modern-slide-in.js')}}"></script>
   <!-- Product view slider -->
   <script type="text/javascript" src="{{asset('front_assets/js/jquery.simpleGallery.js')}}"></script>
   <script type="text/javascript" src="{{asset('front_assets/js/jquery.simpleLens.js')}}"></script>
@@ -400,16 +400,16 @@
   <!-- Price picker slider -->
   <script type="text/javascript" src="{{asset('front_assets/js/nouislider.js')}}"></script>
   <!-- Custom js -->
-  <script src="{{asset('front_assets/js/custom.js')}}"></script> 
+  <script src="{{asset('front_assets/js/custom.js')}}"></script>
   <script type="text/javascript">
     $(function(){
         @yield('script')
     });
 </script>
-{{-- <script type="text/javascript">
+<script type="text/javascript">
   $(window).on('load', function() {
       $('#myModal').modal('show');
   });
-</script> --}}
+</script>
   </body>
 </html>

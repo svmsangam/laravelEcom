@@ -18,7 +18,7 @@ return new class extends Migration
             $table->string('image');
             $table->string('btn_text');
             $table->string('btn_link');
-            $table->integer('status');
+            $table->integer('status')->default(0);
             $table->timestamps();
         });
     }
